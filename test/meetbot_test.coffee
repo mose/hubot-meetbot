@@ -163,3 +163,36 @@ describe 'meetbot module', ->
           expect(hubotResponseCount()).to.eql 1
           expect(hubotResponse())
           .to.eq 'Meeting `newmeeting` is now open. All discussions will now be recorded.'
+# --------------------------------------------------------------------------------------------------
+  context 'meeting is started', ->
+
+    context 'and someone says something', ->
+      beforeEach ->
+        room.robot.brain.data.meetbot = {
+          room1: {
+            label: 'standup meeting',
+            info: ['event1'],
+            action: ['event1'],
+            agreed: [ ],
+            logs: [ ]
+          }
+        }
+        room.robot.brain.emit 'loaded'
+        @now = moment().valueOf()
+        @clock = sinon.useFakeTimers({ now: @now, toFake: ['Date'] })
+
+      afterEach ->
+        room.robot.brain.data.meetbot = { }
+        @clock.restore()
+
+      context 'I say something', ->
+        hubotHear 'I say something'
+        it 'should record what someone says in the logs', ->
+          expect(hubotResponseCount()).to.eql 0
+          expect(room.robot.meetbot.data.room1.logs.length).to.eql 1
+          expect(room.robot.meetbot.data.room1.logs[0])
+          .to.eql {
+            time: moment(@clock.now, 'x').utc().format()
+            user: 'momo'
+            text: 'I say something'
+          }

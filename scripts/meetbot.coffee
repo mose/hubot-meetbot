@@ -33,7 +33,7 @@ module.exports = (robot) ->
 
 #   hubot meet
   robot.respond /meet\s*$/, (res) ->
-    meetbot.hasMeeting(res.envelope.room ? res.envelope.reply_to)
+    meetbot.findMeeting(res.envelope.room ? res.envelope.reply_to)
     .then (label) ->
       if label
         res.send "A meeting is in progress, named `#{label}`."
@@ -54,3 +54,8 @@ module.exports = (robot) ->
     .catch (e) ->
       res.send e
     res.finish()
+
+  robot.hear /(.*)$/, (res) ->
+    meetbot.hasMeeting(res.envelope.room ? res.envelope.reply_to)
+    .then ->
+      meetbot.addLog(res.envelope)

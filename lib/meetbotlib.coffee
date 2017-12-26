@@ -30,12 +30,19 @@ class Meetbot
       else
         res()
 
-  hasMeeting: (room) ->
+  findMeeting: (room) ->
     return new Promise (res, err) =>
       if @data[room]
         res @data[room].label
       else
         res false
+
+  hasMeeting: (room) ->
+    return new Promise (res, err) =>
+      if @data[room]
+        res false
+      else
+        err false
 
   startMeeting: (room, label) ->
     return new Promise (res, err) =>
@@ -53,6 +60,13 @@ class Meetbot
           logs: []
         }
         res label
+
+  addLog: (envelope) ->
+    @data[envelope.room].logs.push {
+      time: moment().utc().format()
+      user: envelope.user.name
+      text: envelope.message.text
+    }
 
 
 
