@@ -44,11 +44,11 @@ describe 'meetbot module', ->
     room = helper.createRoom { httpd: false }
     room.robot.logger.error = sinon.stub()
 
-    room.receive = (userName, message) ->
-      new Promise (resolve) =>
-        @messages.push [userName, message]
-        user = room.robot.brain.userForId userName
-        @robot.receive(new Hubot.TextMessage(user, message), resolve)
+    # room.receive = (userName, message) ->
+    #   new Promise (resolve) =>
+    #     @messages.push [userName, message]
+    #     user = room.robot.brain.userForId userName
+    #     @robot.receive(new Hubot.TextMessage(user, message), resolve)
 
 # --------------------------------------------------------------------------------------------------
   context 'meetbot robot launch', ->
@@ -56,15 +56,15 @@ describe 'meetbot module', ->
       room.robot.brain.data.meetbot = {
         room1: {
           label: 'standup meeting',
-          info: [ 
+          info: [
             'event1'
           ],
-          action: [ 
+          action: [
             'event1'
           ],
           agreed: [ ],
           logs: [
-            ""
+            ''
           ]
         }
       }
@@ -76,8 +76,8 @@ describe 'meetbot module', ->
     context 'when brain is loaded', ->
       it 'room1 notes should be loaded', ->
         expect(room.robot.meetbot.data.room1).to.be.defined
-      it 'room2 notes shoiuld be absent', ->
-        expect(room.robot.meetbot.data.room1).not.to.be.defined
+      it 'room2 notes should be absent', ->
+        expect(room.robot.meetbot.data.room2).not.to.be.defined
 
 # --------------------------------------------------------------------------------------------------
   context 'user wants to know hubot-meetbot version', ->
@@ -89,3 +89,43 @@ describe 'meetbot module', ->
         expect(hubotResponse()).to.match /hubot-meetbot is version [0-9]+\.[0-9]+\.[0-9]+/
 
 # --------------------------------------------------------------------------------------------------
+  context 'user wants to know if a meeting is going on', ->
+
+    context 'there is no meeting going on', ->
+      beforeEach ->
+        room.robot.brain.data.meetbot = { }
+        room.robot.brain.emit 'loaded'
+
+      context 'meet', ->
+        hubot 'meet'
+        it 'should explain that there is no meeting', ->
+          expect(hubotResponseCount()).to.eql 1
+          expect(hubotResponse()).to.eq 'There is no meeting going on right now on this channel.'
+
+    context 'there is a meeting going on', ->
+      beforeEach ->
+        room.robot.brain.data.meetbot = {
+          room1: {
+            label: 'standup meeting',
+            info: [
+              'event1'
+            ],
+            action: [
+              'event1'
+            ],
+            agreed: [ ],
+            logs: [
+              ''
+            ]
+          }
+        }
+        room.robot.brain.emit 'loaded'
+
+      afterEach ->
+        room.robot.brain.data.meetbot = { }
+      
+      context 'meet', ->
+        hubot 'meet'
+        it 'should give the label of the ongoing meeting', ->
+          expect(hubotResponseCount()).to.eql 1
+          expect(hubotResponse()).to.eq 'A meeting is in progress, named `standup meeting`.'

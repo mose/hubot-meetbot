@@ -17,7 +17,7 @@ class Meetbot
     @robot.brain.on 'loaded', storageLoaded
     storageLoaded() # just in case storage was loaded before we got here
 
-  getPermission: (user, group) =>
+  withPermission: (user) =>
     return new Promise (res, err) =>
       if process.env.HUBOT_MEETBOT_NOAUTH is 'y'
         isAuthorized = true
@@ -28,6 +28,18 @@ class Meetbot
         err "You don't have permission to do that."
       else
         res()
+
+  hasMeeting: (room) ->
+    return new Promise (res, err) =>
+      if @data[room]
+        res @data[room].label
+      else
+        res false
+
+  startMeeting: (room, label) ->
+    return new Promise (res, err) ->
+      res()
+
 
 
 module.exports = Meetbot

@@ -44,6 +44,10 @@ The commands are loosely inspired from http://meetbot.debian.net/Manual.html
 
 Commands prefixed by `.` are here taking in account we use the `.` as hubot prefix, just replace it with your prefix if it is different. Uncommented commands are just not yet implemented.
 
+    .meet
+        give the name of the ongoing meeting on the given channel
+        or warns that there is no ongoing meeting at the moment
+
     .meet start [<label>]
     .meet on [<label>]
     .startmeeting [<label>]
