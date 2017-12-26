@@ -181,5 +181,5 @@ describe 'meetbot module', ->
         hubot 'meet topic some topic'
         it 'should record the new topic', ->
           expect(hubotResponseCount()).to.eql 1
-          expect(room.robot.meetbot.data.room1.logs.length).to.eql 0
+          expect(room.robot.meetbot.data.room1.logs.length).to.eql 1
           expect(room.robot.meetbot.data.room1.topic).to.eql 'some topic'

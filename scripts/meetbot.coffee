@@ -65,7 +65,6 @@ module.exports = (robot) ->
       res.send "Topic `#{topic}` recorded for meeting `#{label}`."
     .catch (e) ->
       res.send e
-    res.finish()
 
   robot.hear /(.*)$/, (res) ->
     meetbot.hasMeeting(res.envelope.room ? res.envelope.reply_to)
