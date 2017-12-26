@@ -178,8 +178,7 @@ describe 'meetbot module', ->
           }
         }
         room.robot.brain.emit 'loaded'
-        @now = moment().valueOf()
-        @clock = sinon.useFakeTimers({ now: @now, toFake: ['Date'] })
+        @clock = sinon.useFakeTimers({ now: moment().valueOf(), toFake: ['Date'] })
 
       afterEach ->
         room.robot.brain.data.meetbot = { }
