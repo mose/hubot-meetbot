@@ -73,7 +73,31 @@ class Meetbot
     return new Promise (res, err) =>
       if @data[room]
         @data[room].topic = topic
-        res topic
+        res { label: @data[room].label, topic: topic }
+      else
+        err 'There is no ongoing meeting here.'
+
+  addAgreement: (room, text) ->
+    return new Promise (res, err) =>
+      if @data[room]
+        @data[room].agreed.push text
+        res res { label: @data[room].label, text: text }
+      else
+        err 'There is no ongoing meeting here.'
+
+  addInfo: (room, text) ->
+    return new Promise (res, err) =>
+      if @data[room]
+        @data[room].info.push text
+        res res { label: @data[room].label, text: text }
+      else
+        err 'There is no ongoing meeting here.'
+
+  addAction: (room, text) ->
+    return new Promise (res, err) =>
+      if @data[room]
+        @data[room].action.push text
+        res res { label: @data[room].label, text: text }
       else
         err 'There is no ongoing meeting here.'
 

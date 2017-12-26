@@ -177,9 +177,81 @@ describe 'meetbot module', ->
             text: 'I say something'
           }
 
+      # topic
       context 'meet topic some topic', ->
+        afterEach ->
+          room.robot.meetbot.data.room1.logs = []
         hubot 'meet topic some topic'
         it 'should record the new topic', ->
           expect(hubotResponseCount()).to.eql 1
           expect(room.robot.meetbot.data.room1.logs.length).to.eql 1
           expect(room.robot.meetbot.data.room1.topic).to.eql 'some topic'
+          expect(hubotResponse())
+          .to.eq 'Topic `some topic` recorded for meeting `standup meeting`.'
+
+      context 'meet agree some topic', ->
+        afterEach ->
+          room.robot.meetbot.data.room1.logs = []
+        hubot 'meet agree some topic'
+        it 'should record the new agreement', ->
+          expect(hubotResponseCount()).to.eql 1
+          expect(room.robot.meetbot.data.room1.logs.length).to.eql 1
+          expect(room.robot.meetbot.data.room1.agreed[0]).to.eql 'some topic'
+          expect(hubotResponse())
+          .to.eq 'Agreement `some topic` recorded for meeting `standup meeting`.'
+
+      context 'agree some topic', ->
+        afterEach ->
+          room.robot.meetbot.data.room1.logs = []
+        hubot 'agree some topic'
+        it 'should record the new agreement', ->
+          expect(hubotResponse())
+          .to.eq 'Agreement `some topic` recorded for meeting `standup meeting`.'
+
+      context 'agreed some topic', ->
+        afterEach ->
+          room.robot.meetbot.data.room1.logs = []
+        hubot 'agreed some topic'
+        it 'should record the new agreement', ->
+          expect(hubotResponse())
+          .to.eq 'Agreement `some topic` recorded for meeting `standup meeting`.'
+
+      # info
+      context 'meet info some info', ->
+        afterEach ->
+          room.robot.meetbot.data.room1.logs = []
+        hubot 'meet info some info'
+        it 'should record the new agreement', ->
+          expect(hubotResponseCount()).to.eql 1
+          expect(room.robot.meetbot.data.room1.logs.length).to.eql 1
+          expect(room.robot.meetbot.data.room1.info[0]).to.eql 'some info'
+          expect(hubotResponse())
+          .to.eq 'Info `some info` recorded for meeting `standup meeting`.'
+
+      context 'info some info', ->
+        afterEach ->
+          room.robot.meetbot.data.room1.logs = []
+        hubot 'info some info'
+        it 'should record the new agreement', ->
+          expect(hubotResponse())
+          .to.eq 'Info `some info` recorded for meeting `standup meeting`.'
+
+      # action
+      context 'meet action some action', ->
+        afterEach ->
+          room.robot.meetbot.data.room1.logs = []
+        hubot 'meet action some action'
+        it 'should record the new agreement', ->
+          expect(hubotResponseCount()).to.eql 1
+          expect(room.robot.meetbot.data.room1.logs.length).to.eql 1
+          expect(room.robot.meetbot.data.room1.action[0]).to.eql 'some action'
+          expect(hubotResponse())
+          .to.eq 'Action `some action` recorded for meeting `standup meeting`.'
+
+      context 'action some action', ->
+        afterEach ->
+          room.robot.meetbot.data.room1.logs = []
+        hubot 'action some action'
+        it 'should record the new agreement', ->
+          expect(hubotResponse())
+          .to.eq 'Action `some action` recorded for meeting `standup meeting`.'

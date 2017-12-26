@@ -69,12 +69,13 @@ Commands prefixed by `.` are here taking in account we use the `.` as hubot pref
         Sets teh topic for the meeting
         perms: admin only
 
-    .agree <text>
+    .meet agree info<text>
     .agreed <text>
+    .agree <text>
         Mark something as agreed on. The rest of the line is the details
         perms: admin only
 
-    .meet info <text>
+    .meet info info<text>
     .info <text>
         Add an INFO item to the minutes
 
