@@ -27,5 +27,5 @@ module.exports = (robot) ->
   #   hubot meet version
   robot.respond /meet version\s*$/, (res) ->
     pkg = require path.join __dirname, '..', 'package.json'
-    res.send "hubot-meetbot module is version #{pkg.version}"
+    res.send "hubot-meetbot is version #{pkg.version}"
     res.finish()

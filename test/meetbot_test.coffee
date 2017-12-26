@@ -6,6 +6,7 @@ require('source-map-support').install {
 require('es6-promise').polyfill()
 
 Helper = require('hubot-test-helper')
+Hubot = require('../node_modules/hubot')
 
 # helper loads a specific script if it's a file
 helper = new Helper('../scripts/meetbot.coffee')
@@ -20,10 +21,18 @@ room = null
 # --------------------------------------------------------------------------------------------------
 describe 'meetbot module', ->
 
-  hubot = (message, userName = 'momo', tempo = 40) ->
+  hubotEmit = (e, data, tempo = 40) ->
     beforeEach (done) ->
-      room.user.say userName, "@hubot #{message}"
+      room.robot.emit e, data
       setTimeout (done), tempo
+ 
+  hubotHear = (message, userName = 'momo', tempo = 40) ->
+    beforeEach (done) ->
+      room.user.say userName, message
+      setTimeout (done), tempo
+
+  hubot = (message, userName = 'momo') ->
+    hubotHear "@hubot #{message}", userName
 
   hubotResponse = (i = 1) ->
     room.messages[i]?[1]
@@ -76,7 +85,7 @@ describe 'meetbot module', ->
     context 'meet version', ->
       hubot 'meet version'
       it 'should reply version number', ->
-        expect(hubotResponse()).to.match /hubot-meetbot is version [0-9]+\.[0-9]+\.[0-9]+/
         expect(hubotResponseCount()).to.eql 1
+        expect(hubotResponse()).to.match /hubot-meetbot is version [0-9]+\.[0-9]+\.[0-9]+/
 
 # --------------------------------------------------------------------------------------------------
