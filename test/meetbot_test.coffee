@@ -35,6 +35,12 @@ describe 'meetbot module', ->
     room = helper.createRoom { httpd: false }
     room.robot.logger.error = sinon.stub()
 
+    room.receive = (userName, message) ->
+      new Promise (resolve) =>
+        @messages.push [userName, message]
+        user = room.robot.brain.userForId userName
+        @robot.receive(new Hubot.TextMessage(user, message), resolve)
+
   # ---------------------------------------------------------------------------------
   context 'meetbot robot launch', ->
     beforeEach ->
@@ -51,8 +57,7 @@ describe 'meetbot module', ->
           logs: [
             ""
           ]
-        },
-        room2: { }
+        }
       }
       room.robot.brain.emit 'loaded'
 
@@ -61,18 +66,15 @@ describe 'meetbot module', ->
 
     context 'when brain is loaded', ->
       it 'room1 notes should be loaded', ->
-        expect(room.robot.at.actions.somejob).not.to.be.defined
-      it 'jobs stored as started are started', ->
-        expect(room.robot.at.actions.other).to.be.defined
-      it 'job in brain should have a tz recorded', ->
-        expect(room.robot.brain.data.at.other.tz).to.eql 'UTC'
-
+        expect(room.robot.meetbot.data.room1).to.be.defined
+      it 'room2 notes shoiuld be absent', ->
+        expect(room.robot.meetbot.data.room1).not.to.be.defined
 
   # ---------------------------------------------------------------------------------
   context 'user wants to know hubot-meetbot version', ->
 
     context 'meet version', ->
-      hubot 'at version'
+      hubot 'meet version'
       it 'should reply version number', ->
         expect(hubotResponse()).
           to.match /hubot-meetbot module is version [0-9]+\.[0-9]+\.[0-9]+/

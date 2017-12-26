@@ -3,9 +3,9 @@ Hubot Meetbot Plugin
 
 [![Version](https://img.shields.io/npm/v/hubot-meetbot.svg)](https://www.npmjs.com/package/hubot-meetbot)
 [![Downloads](https://img.shields.io/npm/dt/hubot-meetbot.svg)](https://www.npmjs.com/package/hubot-meetbot)
-[![Build Status](https://img.shields.io/travis/Gandi/hubot-meetbot.svg)](https://travis-ci.org/Gandi/hubot-meetbot)
-[![Dependency Status](https://gemnasium.com/Gandi/hubot-meetbot.svg)](https://gemnasium.com/Gandi/hubot-meetbot)
-[![Coverage Status](https://img.shields.io/codeclimate/coverage/github/Gandi/hubot-meetbot.svg)](https://codeclimate.com/github/Gandi/hubot-meetbot/coverage)
+[![Build Status](https://img.shields.io/travis/mose/hubot-meetbot.svg)](https://travis-ci.org/mose/hubot-meetbot)
+[![Dependency Status](https://gemnasium.com/mose/hubot-meetbot.svg)](https://gemnasium.com/mose/hubot-meetbot)
+[![Coverage Status](https://img.shields.io/codeclimate/coverage/github/mose/hubot-meetbot.svg)](https://codeclimate.com/github/mose/hubot-meetbot/coverage)
 [![NPM](https://nodei.co/npm/hubot-meetbot.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/hubot-meetbot/)
 
 This plugin is a clone of the famous Debian Meetbot https://wiki.debian.org/MeetBot, for use of teams on slack.
@@ -108,12 +108,6 @@ Testing
 Changelog
 ---------------
 All changes are listed in the [CHANGELOG](CHANGELOG.md)
-
-Contribute
---------------
-Feel free to open a PR if you find any bug, typo, want to improve documentation, or think about a new feature. 
-
-Gandi loves Free and Open Source Software. This project is used internally at Gandi but external contributions are **very welcome**. 
 
 Authors
 ------------
