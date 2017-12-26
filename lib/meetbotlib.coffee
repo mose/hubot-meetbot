@@ -52,6 +52,7 @@ class Meetbot
         label ||= util.format 'meeting of %s', moment().utc().format('HH:mm')
         @data[room] = {
           label: label
+          topic: ''
           start: moment().utc().format()
           end: false
           info: []
@@ -67,6 +68,14 @@ class Meetbot
       user: envelope.user.name
       text: envelope.message.text
     }
+
+  addTopic: (room, topic) ->
+    return new Promise (res, err) =>
+      if @data[room]
+        @data[room].topic = topic
+        res topic
+      else
+        err 'There is no ongoing meeting here.'
 
 
 

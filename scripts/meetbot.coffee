@@ -55,6 +55,18 @@ module.exports = (robot) ->
       res.send e
     res.finish()
 
+#   hubot meet topic <topic>
+  robot.respond /meet topic\s*(.*)?$/, (res) ->
+    topic = res.match[1]
+    meetbot.hasMeeting(res.envelope.room ? res.envelope.reply_to)
+    .then ->
+      meetbot.addTopic(res.envelope.room, topic)
+    .then (label) ->
+      res.send "Topic `#{topic}` recorded for meeting `#{label}`."
+    .catch (e) ->
+      res.send e
+    res.finish()
+
   robot.hear /(.*)$/, (res) ->
     meetbot.hasMeeting(res.envelope.room ? res.envelope.reply_to)
     .then ->

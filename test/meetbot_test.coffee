@@ -17,6 +17,16 @@ moment = require 'moment'
 expect = require('chai').use(require('sinon-chai')).expect
 
 room = null
+meetData = {
+  room1: {
+    label: 'standup meeting'
+    topic: ''
+    info: [ ]
+    action: [ ]
+    agreed: [ ]
+    logs: [ ]
+  }
+}
 
 # --------------------------------------------------------------------------------------------------
 describe 'meetbot module', ->
@@ -53,15 +63,7 @@ describe 'meetbot module', ->
 # --------------------------------------------------------------------------------------------------
   context 'meetbot robot launch', ->
     beforeEach ->
-      room.robot.brain.data.meetbot = {
-        room1: {
-          label: 'standup meeting',
-          info: ['event1'],
-          action: ['event1'],
-          agreed: [ ],
-          logs: [ ]
-        }
-      }
+      room.robot.brain.data.meetbot = meetData
       room.robot.brain.emit 'loaded'
 
     afterEach ->
@@ -98,15 +100,7 @@ describe 'meetbot module', ->
 
     context 'there is a meeting going on', ->
       beforeEach ->
-        room.robot.brain.data.meetbot = {
-          room1: {
-            label: 'standup meeting',
-            info: ['event1'],
-            action: ['event1'],
-            agreed: [ ],
-            logs: [ ]
-          }
-        }
+        room.robot.brain.data.meetbot = meetData
         room.robot.brain.emit 'loaded'
 
       afterEach ->
@@ -122,15 +116,7 @@ describe 'meetbot module', ->
 
     context 'but there is a meeting already going on', ->
       beforeEach ->
-        room.robot.brain.data.meetbot = {
-          room1: {
-            label: 'standup meeting',
-            info: ['event1'],
-            action: ['event1'],
-            agreed: [ ],
-            logs: [ ]
-          }
-        }
+        room.robot.brain.data.meetbot = meetData
         room.robot.brain.emit 'loaded'
 
       afterEach ->
@@ -163,20 +149,13 @@ describe 'meetbot module', ->
           expect(hubotResponseCount()).to.eql 1
           expect(hubotResponse())
           .to.eq 'Meeting `newmeeting` is now open. All discussions will now be recorded.'
+
 # --------------------------------------------------------------------------------------------------
   context 'meeting is started', ->
 
     context 'and someone says something', ->
       beforeEach ->
-        room.robot.brain.data.meetbot = {
-          room1: {
-            label: 'standup meeting',
-            info: ['event1'],
-            action: ['event1'],
-            agreed: [ ],
-            logs: [ ]
-          }
-        }
+        room.robot.brain.data.meetbot = meetData
         room.robot.brain.emit 'loaded'
         @clock = sinon.useFakeTimers({ now: moment().valueOf(), toFake: ['Date'] })
 
@@ -185,6 +164,8 @@ describe 'meetbot module', ->
         @clock.restore()
 
       context 'I say something', ->
+        afterEach ->
+          room.robot.meetbot.data.room1.logs = []
         hubotHear 'I say something'
         it 'should record what someone says in the logs', ->
           expect(hubotResponseCount()).to.eql 0
@@ -195,3 +176,10 @@ describe 'meetbot module', ->
             user: 'momo'
             text: 'I say something'
           }
+
+      context 'meet topic some topic', ->
+        hubot 'meet topic some topic'
+        it 'should record the new topic', ->
+          expect(hubotResponseCount()).to.eql 1
+          expect(room.robot.meetbot.data.room1.logs.length).to.eql 0
+          expect(room.robot.meetbot.data.room1.topic).to.eql 'some topic'
