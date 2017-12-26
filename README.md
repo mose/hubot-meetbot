@@ -5,7 +5,7 @@ Hubot Meetbot Plugin
 [![Downloads](https://img.shields.io/npm/dt/hubot-meetbot.svg)](https://www.npmjs.com/package/hubot-meetbot)
 [![Build Status](https://img.shields.io/travis/mose/hubot-meetbot.svg)](https://travis-ci.org/mose/hubot-meetbot)
 [![Dependency Status](https://gemnasium.com/mose/hubot-meetbot.svg)](https://gemnasium.com/mose/hubot-meetbot)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/0cf51bb54988ba1f689b/test_coverage)](https://codeclimate.com/github/mose/hubot-meetbot/test_coverage)
+[![Coverage Status](https://coveralls.io/repos/github/mose/hubot-meetbot/badge.svg?branch=master)](https://coveralls.io/github/mose/hubot-meetbot?branch=master)
 [![NPM](https://nodei.co/npm/hubot-meetbot.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/hubot-meetbot/)
 
 This plugin is a clone of the famous Debian Meetbot https://wiki.debian.org/MeetBot, for use of teams on slack.
