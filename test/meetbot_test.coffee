@@ -136,8 +136,30 @@ describe 'meetbot module', ->
       afterEach ->
         room.robot.brain.data.meetbot = { }
 
-      context 'meet start', ->
+      context 'meet start newmeeting', ->
         hubot 'meet start newmeeting'
         it 'should give the label of the ongoing meeting', ->
           expect(hubotResponseCount()).to.eql 1
           expect(hubotResponse()).to.eq 'A meeting is already in progress, named `standup meeting`.'
+
+    context 'and there is no meeting already going on', ->
+      beforeEach ->
+        room.robot.brain.data.meetbot = { }
+      afterEach ->
+        room.robot.brain.data.meetbot = { }
+
+      context 'meet start', ->
+        beforeEach ->
+          @now = moment().utc().format('HH:mm')
+        hubot 'meet start'
+        it 'should give the label of the new meeting', ->
+          expect(hubotResponseCount()).to.eql 1
+          expect(hubotResponse())
+          .to.eq "Meeting `meeting of #{@now}` is now open. All discussions will now be recorded."
+
+      context 'meet start newmeeting', ->
+        hubot 'meet start newmeeting'
+        it 'should announce the new meeting is started', ->
+          expect(hubotResponseCount()).to.eql 1
+          expect(hubotResponse())
+          .to.eq 'Meeting `newmeeting` is now open. All discussions will now be recorded.'

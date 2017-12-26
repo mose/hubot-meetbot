@@ -6,6 +6,7 @@
 
 querystring = require 'querystring'
 moment = require 'moment'
+util = require 'util'
 Promise = require 'bluebird'
 
 class Meetbot
@@ -41,7 +42,7 @@ class Meetbot
       if @data[room]
         err "A meeting is already in progress, named `#{@data[room].label}`."
       else
-        label ||= printf 'meeting of %s', moment().utc().format('H:i')
+        label ||= util.format 'meeting of %s', moment().utc().format('HH:mm')
         @data[room] = {
           label: label
           start: moment().utc().format()
