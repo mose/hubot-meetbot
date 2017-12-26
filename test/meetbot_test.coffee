@@ -255,3 +255,41 @@ describe 'meetbot module', ->
         it 'should record the new agreement', ->
           expect(hubotResponse())
           .to.eq 'Action `some action` recorded for meeting `standup meeting`.'
+
+# --------------------------------------------------------------------------------------------------
+  context 'meeting is NOT started', ->
+
+    context 'and someone says something', ->
+      beforeEach ->
+        room.robot.brain.data.meetbot = { }
+        room.robot.brain.emit 'loaded'
+
+      afterEach ->
+        room.robot.brain.data.meetbot = { }
+
+      context 'I say something', ->
+        hubotHear 'I say something'
+        it 'should not record anything', ->
+          expect(hubotResponseCount()).to.eql 0
+          expect(room.robot.meetbot.data).to.eql { }
+
+      # topic
+      context 'meet topic some topic', ->
+        hubot 'meet topic some topic'
+        it 'should warn that no meeting is ongoing', ->
+          expect(hubotResponseCount()).to.eql 1
+          expect(hubotResponse()).to.eq 'There is no ongoing meeting here.'
+
+      # info
+      context 'meet info some info', ->
+        hubot 'meet info some info'
+        it 'should warn that no meeting is ongoing', ->
+          expect(hubotResponseCount()).to.eql 1
+          expect(hubotResponse()).to.eq 'There is no ongoing meeting here.'
+
+      # action
+      context 'meet action some action', ->
+        hubot 'meet action some action'
+        it 'should warn that no meeting is ongoing', ->
+          expect(hubotResponseCount()).to.eql 1
+          expect(hubotResponse()).to.eq 'There is no ongoing meeting here.'

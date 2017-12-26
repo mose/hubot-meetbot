@@ -59,9 +59,7 @@ module.exports = (robot) ->
 #   hubot meet topic <topic>
   robot.respond /meet topic\s*(.*)?$/, (res) ->
     topic = res.match[1]
-    meetbot.hasMeeting(res.envelope.room ? res.envelope.reply_to)
-    .then ->
-      meetbot.addTopic(res.envelope.room, topic)
+    meetbot.addTopic(res.envelope.room, topic)
     .then (data) ->
       res.send "Topic `#{data.topic}` recorded for meeting `#{data.label}`."
     .catch (e) ->
@@ -70,20 +68,17 @@ module.exports = (robot) ->
 #   hubot meet agree <text>
   robot.respond /(?:meet )?agreed?\s*(.*)?$/, (res) ->
     text = res.match[1]
-    meetbot.hasMeeting(res.envelope.room ? res.envelope.reply_to)
-    .then ->
-      meetbot.addAgreement(res.envelope.room, text)
+    meetbot.addAgreement(res.envelope.room, text)
     .then (data) ->
       res.send "Agreement `#{data.text}` recorded for meeting `#{data.label}`."
     .catch (e) ->
+      console.log e
       res.send e
 
 #   hubot meet info <text>
   robot.respond /(?:meet )?info\s*(.*)?$/, (res) ->
     text = res.match[1]
-    meetbot.hasMeeting(res.envelope.room ? res.envelope.reply_to)
-    .then ->
-      meetbot.addInfo(res.envelope.room, text)
+    meetbot.addInfo(res.envelope.room, text)
     .then (data) ->
       res.send "Info `#{data.text}` recorded for meeting `#{data.label}`."
     .catch (e) ->
@@ -92,9 +87,7 @@ module.exports = (robot) ->
 #   hubot meet action <text>
   robot.respond /(?:meet )?action\s*(.*)?$/, (res) ->
     text = res.match[1]
-    meetbot.hasMeeting(res.envelope.room ? res.envelope.reply_to)
-    .then ->
-      meetbot.addAction(res.envelope.room, text)
+    meetbot.addAction(res.envelope.room, text)
     .then (data) ->
       res.send "Action `#{data.text}` recorded for meeting `#{data.label}`."
     .catch (e) ->
@@ -105,3 +98,4 @@ module.exports = (robot) ->
     meetbot.hasMeeting(res.envelope.room ? res.envelope.reply_to)
     .then ->
       meetbot.addLog(res.envelope)
+    .catch (e) -> { }

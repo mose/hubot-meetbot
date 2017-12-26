@@ -40,9 +40,9 @@ class Meetbot
   hasMeeting: (room) ->
     return new Promise (res, err) =>
       if @data[room]
-        res false
+        res true
       else
-        err false
+        err 'There is no ongoing meeting here.'
 
   startMeeting: (room, label) ->
     return new Promise (res, err) =>
@@ -81,7 +81,7 @@ class Meetbot
     return new Promise (res, err) =>
       if @data[room]
         @data[room].agreed.push text
-        res res { label: @data[room].label, text: text }
+        res { label: @data[room].label, text: text }
       else
         err 'There is no ongoing meeting here.'
 
@@ -89,7 +89,7 @@ class Meetbot
     return new Promise (res, err) =>
       if @data[room]
         @data[room].info.push text
-        res res { label: @data[room].label, text: text }
+        res { label: @data[room].label, text: text }
       else
         err 'There is no ongoing meeting here.'
 
@@ -97,7 +97,7 @@ class Meetbot
     return new Promise (res, err) =>
       if @data[room]
         @data[room].action.push text
-        res res { label: @data[room].label, text: text }
+        res { label: @data[room].label, text: text }
       else
         err 'There is no ongoing meeting here.'
 
