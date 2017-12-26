@@ -7,4 +7,4 @@ after_success:
   - './node_modules/.bin/codeclimate-test-reporter < ./coverage/lcov.info'
 addons:
   code_climate:
-    repo_token: 2bcfc2891fed07d42b1f44ecba9faa351e968e2c613d710521a06549573a4a5d
+    repo_token: 48a9744f3e5d1f39d1be9f8d61ba645cc6c142d7fc8722a4f7460962c60195f3
