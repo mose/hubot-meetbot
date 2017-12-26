@@ -56,16 +56,10 @@ describe 'meetbot module', ->
       room.robot.brain.data.meetbot = {
         room1: {
           label: 'standup meeting',
-          info: [
-            'event1'
-          ],
-          action: [
-            'event1'
-          ],
+          info: ['event1'],
+          action: ['event1'],
           agreed: [ ],
-          logs: [
-            ''
-          ]
+          logs: [ ]
         }
       }
       room.robot.brain.emit 'loaded'
@@ -107,25 +101,43 @@ describe 'meetbot module', ->
         room.robot.brain.data.meetbot = {
           room1: {
             label: 'standup meeting',
-            info: [
-              'event1'
-            ],
-            action: [
-              'event1'
-            ],
+            info: ['event1'],
+            action: ['event1'],
             agreed: [ ],
-            logs: [
-              ''
-            ]
+            logs: [ ]
           }
         }
         room.robot.brain.emit 'loaded'
 
       afterEach ->
         room.robot.brain.data.meetbot = { }
-      
+
       context 'meet', ->
         hubot 'meet'
         it 'should give the label of the ongoing meeting', ->
           expect(hubotResponseCount()).to.eql 1
           expect(hubotResponse()).to.eq 'A meeting is in progress, named `standup meeting`.'
+# --------------------------------------------------------------------------------------------------
+  context 'user starts a new meeting', ->
+
+    context 'but there is a meeting already going on', ->
+      beforeEach ->
+        room.robot.brain.data.meetbot = {
+          room1: {
+            label: 'standup meeting',
+            info: ['event1'],
+            action: ['event1'],
+            agreed: [ ],
+            logs: [ ]
+          }
+        }
+        room.robot.brain.emit 'loaded'
+
+      afterEach ->
+        room.robot.brain.data.meetbot = { }
+
+      context 'meet start', ->
+        hubot 'meet start newmeeting'
+        it 'should give the label of the ongoing meeting', ->
+          expect(hubotResponseCount()).to.eql 1
+          expect(hubotResponse()).to.eq 'A meeting is already in progress, named `standup meeting`.'

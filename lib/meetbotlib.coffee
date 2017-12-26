@@ -37,8 +37,21 @@ class Meetbot
         res false
 
   startMeeting: (room, label) ->
-    return new Promise (res, err) ->
-      res()
+    return new Promise (res, err) =>
+      if @data[room]
+        err "A meeting is already in progress, named `#{@data[room].label}`."
+      else
+        label ||= printf 'meeting of %s', moment().utc().format('H:i')
+        @data[room] = {
+          label: label
+          start: moment().utc().format()
+          end: false
+          info: []
+          action: []
+          agreed: []
+          logs: []
+        }
+        res label
 
 
 

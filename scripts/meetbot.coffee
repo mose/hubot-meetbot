@@ -44,7 +44,7 @@ module.exports = (robot) ->
     res.finish()
 
 #   hubot meet start [<label>]
-  robot.respond /\(startmeeting|meet \(start|on\)\)\s*(.*)?$/, (res) ->
+  robot.respond /(?:startmeeting|meet (?:start|on))\s*(.*)?$/, (res) ->
     label = res.match[1]
     meetbot.withPermission(res.envelope.user)
     .then ->
