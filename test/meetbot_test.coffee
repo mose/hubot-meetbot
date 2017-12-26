@@ -17,7 +17,7 @@ expect = require('chai').use(require('sinon-chai')).expect
 
 room = null
 
-# ---------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
 describe 'meetbot module', ->
 
   hubot = (message, userName = 'momo', tempo = 40) ->
@@ -41,7 +41,7 @@ describe 'meetbot module', ->
         user = room.robot.brain.userForId userName
         @robot.receive(new Hubot.TextMessage(user, message), resolve)
 
-  # ---------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
   context 'meetbot robot launch', ->
     beforeEach ->
       room.robot.brain.data.meetbot = {
@@ -70,14 +70,13 @@ describe 'meetbot module', ->
       it 'room2 notes shoiuld be absent', ->
         expect(room.robot.meetbot.data.room1).not.to.be.defined
 
-  # ---------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
   context 'user wants to know hubot-meetbot version', ->
 
     context 'meet version', ->
       hubot 'meet version'
       it 'should reply version number', ->
-        expect(hubotResponse()).
-          to.match /hubot-meetbot module is version [0-9]+\.[0-9]+\.[0-9]+/
+        expect(hubotResponse()).to.match /hubot-meetbot is version [0-9]+\.[0-9]+\.[0-9]+/
         expect(hubotResponseCount()).to.eql 1
 
-  # ---------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
