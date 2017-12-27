@@ -39,6 +39,9 @@ When meeting is over and closed, the minutes will be emitted as a `meetbot.notes
 - `MEETBOT_GITLAB_URL`
 - `MEETBOT_GITLAB_APIKEY`
 - `MEETBOT_GITLAB_REPO`
+- `MEETBOT_GITLAB_FILEPATH` and `MEETBOT_GITLAB_DATEFORMAT` - 
+    used to build the file name. optional. default is `minutes/%s-%s.md` and `YYYY-MM-DD`
+    format `MEETBOT_GITLAB_FILEPATH` gets `MEETBOT_GITLAB_DATEFORMAT` and meeting label as arguments
 
 Commands
 --------------
