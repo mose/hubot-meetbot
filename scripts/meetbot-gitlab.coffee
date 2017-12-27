@@ -30,10 +30,18 @@ module.exports = (robot) ->
         date = moment(data.end).format('YYYY-MM-DD')
         gitlab.createBranch(repoId, branchname)
       .then (json) ->
-        text = gitlab.format(data)
+        gitlab.format(data)
+      .then (text) ->
         gitlab.createFile(repoId, branchname, data.end, data.label, text)
       .then (json) ->
-        #create MR
+        gitlab.createMergeRequest(repoId, branchname)
+      .then (json) ->
         res json
       .catch (e) ->
         robot.logger.error e
+
+  robot.respond /meet debug/, (res) ->
+    room = res.envelope.room
+    gitlab.format(robot.brain.data.meetbot[room])
+    .then (text) ->
+      res.send 'ok'

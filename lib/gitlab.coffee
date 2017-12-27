@@ -10,7 +10,10 @@
 # Author:
 #   mose
 
-querystring = require('querystring')
+querystring = require 'querystring'
+moment = require 'moment'
+util = require 'util'
+Promise = require 'bluebird'
 
 class Gitlab
   constructor: (@robot, env) ->
@@ -109,7 +112,7 @@ class Gitlab
       .catch (e) ->
         err e
 
-  createMergeRequest: (msg, repoId, branchName) ->
+  createMergeRequest: (repoId, branchName) ->
     return new Promise (res, err) =>
       query = { }
       query.id = repoId
@@ -125,9 +128,59 @@ class Gitlab
         err e
 
   format: (data) ->
-    back = ''
-    # formatting
-    back
+    return new Promise (res, err) =>
+      back = ''
+      if data.topic
+        back += "#{data.topic}\n"
+      else
+        back += 'Metting of ' + moment(data.start).format('YYYY-MM-DD HH:mm') + '\n'
+      back += '================================\n\n'
+      back += 'From ' + moment(data.start).format('YYYY-MM-DD HH:mm')
+      back += ' to ' + moment(data.end).format('YYYY-MM-DD HH:mm')
+      timespent = moment(data.end).diff(moment(data.start), 'minutes')
+      back += ' (' + timespent + ' min)\n\n'
+      if data.info.length > 0
+        back += 'Info\n'
+        back += '-----'
+        for info in data.info
+          back += "- #{info}\n"
+        back += '\n\n'
+      if data.agreed.length > 0
+        back += 'Agreed\n'
+        back += '-----'
+        for agreed in data.agreed
+          back += "- #{agreed}\n"
+        back += '\n\n'
+      if data.action.length > 0
+        back += 'Action\n'
+        back += '-----\n'
+        for action in data.action
+          back += "- #{action}\n"
+        back += '\n\n'
+      back += 'Full log\n'
+      back += '-----\n```'
+      namewidth = data.logs.reduce (acc, line) ->
+        acc = line.user.length if line.user.length > acc
+        acc
+      , 0
+      for line in data.logs
+        back += util.format '\n%s %s : %s',
+          moment(line.time).format('HH:mm'),
+          @pad(line.user, namewidth + 2),
+          line.text
+      back += '\n```\n\n*EOF*\n'
+      res back
+
+  pad: (string, targetLength) ->
+    targetLength = targetLength >> 0
+    padString = ' '
+    if string.length > targetLength
+      string
+    else
+      targetLength = targetLength - string.length
+      if targetLength > padString.length
+        padString += padString.repeat(targetLength / padString.length)
+      padString.slice(0, targetLength) + string
 
 
 

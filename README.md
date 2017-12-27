@@ -73,7 +73,7 @@ Commands prefixed by `.` are here taking in account we use the `.` as hubot pref
         perms: admin only
 
     .meet topic <topic>
-        Sets teh topic for the meeting
+        Sets the topic for the meeting
         perms: admin only
 
     .meet agree info<text>

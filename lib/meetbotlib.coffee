@@ -18,7 +18,7 @@ class Meetbot
     @robot.brain.on 'loaded', storageLoaded
     storageLoaded() # just in case storage was loaded before we got here
 
-  withPermission: (user) =>
+  withPermission: (user) ->
     return new Promise (res, err) =>
       if process.env.MEETBOT_NOAUTH is 'y'
         isAuthorized = true
@@ -52,7 +52,7 @@ class Meetbot
         label ||= util.format 'meeting of %s', moment().utc().format('HH:mm')
         @data[room] = {
           label: label
-          topic: ''
+          topic: false
           start: moment().utc().format()
           end: false
           info: []
