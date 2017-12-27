@@ -40,8 +40,9 @@ module.exports = (robot) ->
       .catch (e) ->
         robot.logger.error e
 
-  robot.respond /meet debug/, (res) ->
+  robot.respond /meet show/, (res) ->
     room = res.envelope.room
     gitlab.format(robot.brain.data.meetbot[room])
     .then (text) ->
-      res.send 'ok'
+      res.send "```\n#{text.replace /```/g, ''}```"
+    res.finish()
