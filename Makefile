@@ -1,7 +1,7 @@
 # REPORTER = progress
 # REPORTER = list
 # REPORTER = spec
-# REPORTER = dot
+REPORTER = dot
 
 test-full:
 	@NODE_ENV=test ./node_modules/.bin/mocha \

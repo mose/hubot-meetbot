@@ -221,7 +221,7 @@ describe 'meetbot module', ->
         afterEach ->
           room.robot.meetbot.data.room1.logs = []
         hubot 'meet info some info'
-        it 'should record the new agreement', ->
+        it 'should record the new info', ->
           expect(hubotResponseCount()).to.eql 1
           expect(room.robot.meetbot.data.room1.logs.length).to.eql 1
           expect(room.robot.meetbot.data.room1.info[0]).to.eql 'some info'
@@ -232,7 +232,7 @@ describe 'meetbot module', ->
         afterEach ->
           room.robot.meetbot.data.room1.logs = []
         hubot 'info some info'
-        it 'should record the new agreement', ->
+        it 'should record the new info', ->
           expect(hubotResponse())
           .to.eq 'Info `some info` recorded for meeting `standup meeting`.'
 
@@ -241,7 +241,7 @@ describe 'meetbot module', ->
         afterEach ->
           room.robot.meetbot.data.room1.logs = []
         hubot 'meet action some action'
-        it 'should record the new agreement', ->
+        it 'should record the new action', ->
           expect(hubotResponseCount()).to.eql 1
           expect(room.robot.meetbot.data.room1.logs.length).to.eql 1
           expect(room.robot.meetbot.data.room1.action[0]).to.eql 'some action'
@@ -252,9 +252,22 @@ describe 'meetbot module', ->
         afterEach ->
           room.robot.meetbot.data.room1.logs = []
         hubot 'action some action'
-        it 'should record the new agreement', ->
+        it 'should record the new action', ->
           expect(hubotResponse())
           .to.eq 'Action `some action` recorded for meeting `standup meeting`.'
+
+      # end
+      context 'endmeeting', ->
+        beforeEach ->
+          room.robot.brain.data.meetbot = meetData
+        afterEach ->
+          room.robot.meetbot.data.room1 = { }
+        hubot 'endmeeting'
+        it 'should close the meeting', ->
+          expect(hubotResponseCount()).to.eql 1
+          # expect(room.robot.brain.data.meetbot).to.eql room1: { }
+          expect(hubotResponse())
+          .to.eq 'Closing meeting `standup meeting` ...'
 
 # --------------------------------------------------------------------------------------------------
   context 'meeting is NOT started', ->

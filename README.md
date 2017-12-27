@@ -29,11 +29,16 @@ If you use [hubot-auth](https://github.com/hubot-scripts/hubot-auth), the plugin
 
 If hubot-auth is not loaded, all users can access those commands. You can use those variables to tune things up a bit.
 
-- `HUBOT_MEETBOT_NOAUTH` - if defined, it will bypass the need to be admin to use the meetbot admin commands
-- `HUBOT_MEETBOT_AUTH_GROUP` - if defined it will permit group specified to use the meetbot admin commands
+- `MEETBOT_NOAUTH` - if defined, it will bypass the need to be admin to use the meetbot admin commands
+- `MEETBOT_AUTH_GROUP` - if defined it will permit group specified to use the meetbot admin commands
 
 It's also advised to use a brain persistence plugin, whatever it is, to persist ongoing meeting sessions between restarts.
 
+When meeting is over and closed, the minutes will be emitted as a `meetbot.notes` event. For my immediate needs I have added a gitlab process to create a MR with the minutes in there, but later on other processors could be added (github, etherpad, mail, etc). In order for the processor to be functional, those 3 env variables have to be set:
+
+- `MEETBOT_GITLAB_URL`
+- `MEETBOT_GITLAB_APIKEY`
+- `MEETBOT_GITLAB_REPO`
 
 Commands
 --------------
@@ -63,7 +68,6 @@ Commands prefixed by `.` are here taking in account we use the `.` as hubot pref
         An event meetbot.notes will be triggered at the end of the meeting, 
         so you can code whatever you want to do with the meeting notes in your custom bot
         perms: admin only
-
 
     .meet topic <topic>
         Sets teh topic for the meeting

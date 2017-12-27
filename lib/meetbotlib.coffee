@@ -1,5 +1,5 @@
 # Description:
-#   at events library
+#   meetbot library
 #
 # Author:
 #   mose
@@ -20,10 +20,10 @@ class Meetbot
 
   withPermission: (user) =>
     return new Promise (res, err) =>
-      if process.env.HUBOT_MEETBOT_NOAUTH is 'y'
+      if process.env.MEETBOT_NOAUTH is 'y'
         isAuthorized = true
       else
-        isAuthorized = @robot.auth?.hasRole(user, [process.env.HUBOT_MEETBOT_AUTH_GROUP]) or
+        isAuthorized = @robot.auth?.hasRole(user, [process.env.MEETBOT_AUTH_GROUP]) or
                        @robot.auth?.isAdmin(user)
       if @robot.auth? and not isAuthorized
         err "You don't have permission to do that."
@@ -61,6 +61,17 @@ class Meetbot
           logs: []
         }
         res label
+
+  endMeeting: (room) ->
+    return new Promise (res, err) =>
+      if @data[room]
+        label = @data[room].label
+        @data[room].end = moment().utc().format()
+        @robot.emit 'meetbot.notes', @data[room]
+        delete @data[room]
+        res label
+      else
+        err 'There is no ongoing meeting here.'
 
   addLog: (envelope) ->
     @data[envelope.room].logs.push {

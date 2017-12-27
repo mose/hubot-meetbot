@@ -6,6 +6,7 @@
 #   hubot meet
 #   hubot meet start [<label>]
 #   hubot meet start
+#   hubot meet end
 #   hubot meet topic <topic>
 #   hubot meet agree <text>
 #   hubot meet info <text>
@@ -23,8 +24,8 @@ path    = require 'path'
 
 module.exports = (robot) ->
 
-  meetbot = new Meetbot robot, process.env
-  robot.meetbot = meetbot
+  robot.meetbot ?= new Meetbot robot, process.env
+  meetbot = robot.meetbot
 
 #   hubot meet version
   robot.respond /meet version\s*$/, (res) ->
@@ -52,6 +53,18 @@ module.exports = (robot) ->
       meetbot.startMeeting(res.envelope.room, label)
     .then (label) ->
       res.send "Meeting `#{label}` is now open. All discussions will now be recorded."
+    .catch (e) ->
+      res.send e
+    res.finish()
+
+#   hubot meet end
+  robot.respond /(?:endmeeting|meet (?:end|close|off))\s*?$/, (res) ->
+    label = res.match[1]
+    meetbot.withPermission(res.envelope.user)
+    .then ->
+      meetbot.endMeeting(res.envelope.room)
+    .then (label) ->
+      res.send "Closing meeting `#{label}` ..."
     .catch (e) ->
       res.send e
     res.finish()
