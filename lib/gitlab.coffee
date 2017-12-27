@@ -136,39 +136,41 @@ class Gitlab
         back += 'Metting of ' + moment(data.start).format('YYYY-MM-DD HH:mm') + '\n'
       back += '================================\n\n'
       back += 'From ' + moment(data.start).format('YYYY-MM-DD HH:mm')
+      unless data.end
+        data.end = moment().utc().format()
       back += ' to ' + moment(data.end).format('YYYY-MM-DD HH:mm')
-      timespent = moment(data.end).diff(moment(data.start), 'minutes')
+      timespent = moment(data.end).diff(data.start, 'minutes')
       back += ' (' + timespent + ' min)\n\n'
       if data.info.length > 0
         back += 'Info\n'
-        back += '-----'
+        back += '---------'
         for info in data.info
           back += "- #{info}\n"
         back += '\n\n'
       if data.agreed.length > 0
         back += 'Agreed\n'
-        back += '-----'
+        back += '---------'
         for agreed in data.agreed
           back += "- #{agreed}\n"
         back += '\n\n'
       if data.action.length > 0
         back += 'Action\n'
-        back += '-----\n'
+        back += '---------\n'
         for action in data.action
           back += "- #{action}\n"
         back += '\n\n'
       back += 'Full log\n'
-      back += '-----\n```'
+      back += '---------'
       namewidth = data.logs.reduce (acc, line) ->
         acc = line.user.length if line.user.length > acc
         acc
       , 0
       for line in data.logs
-        back += util.format '\n%s %s : %s',
+        back += util.format '\n    %s %s : %s',
           moment(line.time).format('HH:mm'),
           @pad(line.user, namewidth + 2),
           line.text
-      back += '\n```\n\n*EOF*\n'
+      back += '\n\n*EOF*\n'
       res back
 
   pad: (string, targetLength) ->

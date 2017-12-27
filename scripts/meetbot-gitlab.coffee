@@ -44,5 +44,5 @@ module.exports = (robot) ->
     room = res.envelope.room
     gitlab.format(robot.brain.data.meetbot[room])
     .then (text) ->
-      res.send "```\n#{text.replace /```/g, ''}```"
+      res.send "```\n#{text}```"
     res.finish()
