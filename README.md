@@ -1,12 +1,12 @@
 Hubot Meetbot Plugin
 =================================
 
-<!-- [![Version](https://img.shields.io/npm/v/hubot-meetbot.svg)](https://www.npmjs.com/package/hubot-meetbot) -->
-<!-- [![Downloads](https://img.shields.io/npm/dt/hubot-meetbot.svg)](https://www.npmjs.com/package/hubot-meetbot) -->
+[![Version](https://img.shields.io/npm/v/hubot-meetbot.svg)](https://www.npmjs.com/package/hubot-meetbot)
+[![Downloads](https://img.shields.io/npm/dt/hubot-meetbot.svg)](https://www.npmjs.com/package/hubot-meetbot)
 [![Build Status](https://img.shields.io/travis/mose/hubot-meetbot.svg)](https://travis-ci.org/mose/hubot-meetbot)
 [![Dependency Status](https://gemnasium.com/mose/hubot-meetbot.svg)](https://gemnasium.com/mose/hubot-meetbot)
 [![Coverage Status](https://coveralls.io/repos/github/mose/hubot-meetbot/badge.svg?branch=master)](https://coveralls.io/github/mose/hubot-meetbot?branch=master)
-<!-- [![NPM](https://nodei.co/npm/hubot-meetbot.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/hubot-meetbot/) -->
+[![NPM](https://nodei.co/npm/hubot-meetbot.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/hubot-meetbot/)
 
 This plugin is a clone of the famous Debian Meetbot https://wiki.debian.org/MeetBot, for use of teams on slack.
 
