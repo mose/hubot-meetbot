@@ -85,7 +85,7 @@ class Gitlab
       .catch (e) ->
         err e
 
-  createFile: (repoId, date, label, text) ->
+  createFile: (repoId, branchname, date, label, text) ->
     return new Promise (res, err) =>
       filetitle = text
         .slice(0, text.indexOf('\n'))
@@ -93,7 +93,7 @@ class Gitlab
         .replace(/^[0-9]{1,8}/, '')
       filepath = util.format(
         process.env.MEETBOT_GITLAB_FILEPATH,
-        process.env.MEETBOT_GITLAB_DATEFORMAT,
+        moment(date).format(process.env.MEETBOT_GITLAB_DATEFORMAT),
         label
       )
       query = { }
@@ -123,6 +123,11 @@ class Gitlab
         res json_body
       .catch (e) ->
         err e
+
+  format: (data) ->
+    back = ''
+    # formatting
+    back
 
 
 
