@@ -40,10 +40,13 @@ class Gitlab
         .path("api/v3/#{endpoint}")
         .header('PRIVATE-TOKEN', @apikey)
         .get() (error, result, payload) ->
-          if res.statusCode is 200
-            res JSON.parse(payload)
+          if error
+            err error
           else
-            err "http error #{result.statusCode}"
+            if result.statusCode is 200
+              res JSON.parse(payload)
+            else
+              err "http error #{result.statusCode}"
 
   post: (endpoint, body) =>
     return new Promise (res, err) =>
@@ -51,42 +54,45 @@ class Gitlab
         .path("api/v3/#{endpoint}")
         .header('PRIVATE-TOKEN', @apikey)
         .post(body) (error, result, payload) ->
-          if res.statusCode is 201
-            res JSON.parse(payload)
+          if error
+            err error
           else
-            err "http error #{result.statusCode}"
-
+            if result.statusCode is 201
+              res JSON.parse(payload)
+            else
+              err "http error #{result.statusCode}"
 
   getRepoId: (repo) ->
     return new Promise (res, err) =>
       if @robot.brain.data.gitlab.repos[repo]
         res @robot.brain.data.gitlab.repos[repo]
       else
-        endpoint = 'projects/search/' + repo.replace(/.*\//, '') + '?per_page=100'
+        endpoint = 'projects/search/' + repo + '?per_page=100'
         @get(endpoint)
-        .then (json_body) ->
+        .then (json_body) =>
           for p in json_body
             if p.path_with_namespace is repo
               @robot.brain.data.gitlab.repos[repo] = p.id
               res p.id
               break
-          err "Repo #{repo} not found"
+          unless @robot.brain.data.gitlab.repos[repo]
+            err "Repo #{repo} not found"
         .catch (e) ->
           err e
 
-  createBranch: (repoId, branchName) ->
-    return new Promise (res, err) =>
-      query = { }
-      query.id = repoId
-      query.branch_name = branchName
-      query.ref = 'master'
-      body = querystring.stringify(query)
-      endpoint = "projects/#{repoId}/repository/branches"
-      @post(endpoint)
-      .then (json_body) ->
-        res json_body
-      .catch (e) ->
-        err e
+  # createBranch: (repoId, branchName) ->
+  #   return new Promise (res, err) =>
+  #     query = { }
+  #     query.id = repoId
+  #     query.branch_name = branchName
+  #     query.ref = 'master'
+  #     body = querystring.stringify(query)
+  #     endpoint = "projects/#{repoId}/repository/branches"
+  #     @post(endpoint)
+  #     .then (json_body) ->
+  #       res json_body
+  #     .catch (e) ->
+  #       err e
 
   createFile: (repoId, branchname, date, label, text) ->
     return new Promise (res, err) =>
@@ -112,22 +118,22 @@ class Gitlab
       .catch (e) ->
         err e
 
-  createMergeRequest: (repoId, branchName) ->
-    return new Promise (res, err) =>
-      query = { }
-      query.id = repoId
-      query.source_branch = branchName
-      query.target_branch = 'master'
-      query.title = branchName
-      body = querystring.stringify(query)
-      endpoint = "projects/#{repoId}/merge_requests"
-      @post(endpoint)
-      .then (json_body) ->
-        res json_body
-      .catch (e) ->
-        err e
+  # createMergeRequest: (repoId, branchName) ->
+  #   return new Promise (res, err) =>
+  #     query = { }
+  #     query.id = repoId
+  #     query.source_branch = branchName
+  #     query.target_branch = 'master'
+  #     query.title = branchName
+  #     body = querystring.stringify(query)
+  #     endpoint = "projects/#{repoId}/merge_requests"
+  #     @post(endpoint)
+  #     .then (json_body) ->
+  #       res json_body
+  #     .catch (e) ->
+  #       err e
 
-  format: (data) ->
+  formatData: (data) ->
     return new Promise (res, err) =>
       back = ''
       if data.topic
@@ -171,6 +177,7 @@ class Gitlab
           @pad(line.user, namewidth + 2),
           line.text
       back += '\n\n*EOF*\n'
+      console.log back
       res back
 
   pad: (string, targetLength) ->
