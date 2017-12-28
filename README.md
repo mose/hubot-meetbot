@@ -80,7 +80,6 @@ Commands prefixed by `.` are here taking in account we use the `.` as hubot pref
     .agreed <text>
     .agree <text>
         Mark something as agreed on. The rest of the line is the details
-        perms: admin only
 
     .meet info info<text>
     .info <text>

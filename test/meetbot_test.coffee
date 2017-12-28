@@ -78,6 +78,18 @@ describe 'meetbot module', ->
           expect(hubotResponseCount()).to.eql 1
           expect(hubotResponse()).to.eq 'There is no meeting going on right now on this channel.'
 
+    context 'there is a broken meeting going on', ->
+      beforeEach ->
+        room.robot.brain.data.meetbot = { room1: { } }
+        room.robot.brain.emit 'loaded'
+
+      context 'meet', ->
+        hubot 'meet'
+        it 'should explain that there is a broken meeting', ->
+          expect(hubotResponseCount()).to.eql 1
+          expect(hubotResponse())
+          .to.eq 'Opps something is broken in the meeting, you should close it.'
+
     context 'there is a meeting going on', ->
       beforeEach ->
         room.robot.brain.data.meetbot = meetData
@@ -273,6 +285,13 @@ describe 'meetbot module', ->
           expect(hubotResponseCount()).to.eql 1
           expect(hubotResponse()).to.eq 'There is no ongoing meeting here.'
 
+      # agree
+      context 'meet agree decision', ->
+        hubot 'meet agree decision'
+        it 'should warn that no meeting is ongoing', ->
+          expect(hubotResponseCount()).to.eql 1
+          expect(hubotResponse()).to.eq 'There is no ongoing meeting here.'
+
       # info
       context 'meet info some info', ->
         hubot 'meet info some info'
@@ -300,13 +319,15 @@ describe 'meetbot module', ->
         id: 'UXXXXXXXX',
         name: 'normal_user'
       }
+      room.robot.brain.data.meetbot = meetData
+    afterEach ->
+      room.robot.brain.data.meetbot = { }
 
     context 'user wants to know if a meeting is going on', ->
       context 'there is no meeting going on', ->
         beforeEach ->
           room.robot.brain.data.meetbot = { }
           room.robot.brain.emit 'loaded'
-
         context 'meet', ->
           hubot 'meet', 'UXXXXXXXX'
           it 'should explain that there is no meeting', ->
@@ -316,9 +337,6 @@ describe 'meetbot module', ->
     context 'normal user starts a new meeting', ->
       beforeEach ->
         room.robot.brain.data.meetbot = { }
-      afterEach ->
-        room.robot.brain.data.meetbot = { }
-
       context 'meet start new meeting', ->
         beforeEach ->
           @now = moment().utc().format('HH:mm')
@@ -328,13 +346,18 @@ describe 'meetbot module', ->
           expect(hubotResponse())
           .to.eq "You don't have permission to do that."
 
+    context 'normal user end a meeting', ->
+      context 'meet end', ->
+        hubot 'meet end', 'UXXXXXXXX'
+        it 'should deny permission to the user', ->
+          expect(hubotResponseCount()).to.eql 1
+          expect(hubotResponse())
+          .to.eq "You don't have permission to do that."
+
     context 'normal user starts a new meeting in a NOAUTH environment', ->
       beforeEach ->
-        process.env.MEETBOT_NOAUTH='y'
+        process.env.MEETBOT_NOAUTH = 'y'
         room.robot.brain.data.meetbot = { }
-      afterEach ->
-        room.robot.brain.data.meetbot = { }
-
       context 'meet start new meeting', ->
         beforeEach ->
           @now = moment().utc().format('HH:mm')
@@ -342,15 +365,12 @@ describe 'meetbot module', ->
         it 'should deny permission to the user', ->
           expect(hubotResponseCount()).to.eql 1
           expect(hubotResponse())
-          .to.eq "Meeting `new meeting` is now open. All discussions will now be recorded."
+          .to.eq 'Meeting `new meeting` is now open. All discussions will now be recorded.'
 
 
     context 'admin user starts a new meeting', ->
       beforeEach ->
         room.robot.brain.data.meetbot = { }
-      afterEach ->
-        room.robot.brain.data.meetbot = { }
-
       context 'meet start new meeting', ->
         beforeEach ->
           @now = moment().utc().format('HH:mm')

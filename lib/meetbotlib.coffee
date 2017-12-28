@@ -33,7 +33,10 @@ class Meetbot
   findMeeting: (room) ->
     return new Promise (res, err) =>
       if @data[room]
-        res @data[room].label
+        if @data[room].label
+          res @data[room].label
+        else
+          err 'Opps something is broken in the meeting, you should close it.'
       else
         res false
 

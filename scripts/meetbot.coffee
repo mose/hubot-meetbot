@@ -85,7 +85,6 @@ module.exports = (robot) ->
     .then (data) ->
       res.send "Agreement `#{data.text}` recorded for meeting `#{data.label}`."
     .catch (e) ->
-      console.log e
       res.send e
 
 #   hubot meet info <text>
