@@ -21,7 +21,7 @@ module.exports = (robot) ->
     label = data.label.replace(/[^a-zA-Z0-9]/g, '')
     date = moment(data.end).format('YYYY-MM-DD')
     branchname = "#{date}-#{label}"
-    if process.env.MEETBOT_GITLAB_REPO and
+    if false and process.env.MEETBOT_GITLAB_REPO and
     process.env.MEETBOT_GITLAB_URL and
     process.env.MEETBOT_GITLAB_APIKEY
       gitlab.getRepoId(process.env.MEETBOT_GITLAB_REPO)

@@ -1,0 +1,10 @@
+{
+  "room1": {
+    "label": "standup meeting",
+    "topic": "",
+    "info": [ ],
+    "action": [ ],
+    "agreed": [ ],
+    "logs": [ ]
+  }
+}

@@ -143,13 +143,13 @@ class Gitlab
       back += ' (' + timespent + ' min)\n\n'
       if data.info.length > 0
         back += 'Info\n'
-        back += '---------'
+        back += '---------\n'
         for info in data.info
           back += "- #{info}\n"
         back += '\n\n'
       if data.agreed.length > 0
         back += 'Agreed\n'
-        back += '---------'
+        back += '---------\n'
         for agreed in data.agreed
           back += "- #{agreed}\n"
         back += '\n\n'
