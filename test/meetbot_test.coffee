@@ -319,14 +319,30 @@ describe 'meetbot module', ->
       afterEach ->
         room.robot.brain.data.meetbot = { }
 
-      context 'meet start', ->
+      context 'meet start new meeting', ->
         beforeEach ->
           @now = moment().utc().format('HH:mm')
-        hubot 'meet start', 'UXXXXXXXX'
+        hubot 'meet start new meeting', 'UXXXXXXXX'
         it 'should deny permission to the user', ->
           expect(hubotResponseCount()).to.eql 1
           expect(hubotResponse())
           .to.eq "You don't have permission to do that."
+
+    context 'normal user starts a new meeting in a NOAUTH environment', ->
+      beforeEach ->
+        process.env.MEETBOT_NOAUTH='y'
+        room.robot.brain.data.meetbot = { }
+      afterEach ->
+        room.robot.brain.data.meetbot = { }
+
+      context 'meet start new meeting', ->
+        beforeEach ->
+          @now = moment().utc().format('HH:mm')
+        hubot 'meet start new meeting', 'UXXXXXXXX'
+        it 'should deny permission to the user', ->
+          expect(hubotResponseCount()).to.eql 1
+          expect(hubotResponse())
+          .to.eq "Meeting `new meeting` is now open. All discussions will now be recorded."
 
 
     context 'admin user starts a new meeting', ->
@@ -335,7 +351,7 @@ describe 'meetbot module', ->
       afterEach ->
         room.robot.brain.data.meetbot = { }
 
-      context 'meet start', ->
+      context 'meet start new meeting', ->
         beforeEach ->
           @now = moment().utc().format('HH:mm')
         hubot 'meet start new meeting', 'U00000000'
