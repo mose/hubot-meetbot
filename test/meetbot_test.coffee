@@ -22,11 +22,6 @@ meetData = require './sample/meetdata-empty.json'
 # --------------------------------------------------------------------------------------------------
 describe 'meetbot module', ->
 
-  hubotEmit = (e, data, tempo = 40) ->
-    beforeEach (done) ->
-      room.robot.emit e, data
-      setTimeout (done), tempo
- 
   hubotHear = (message, userName = 'momo', tempo = 40) ->
     beforeEach (done) ->
       room.user.say userName, message
@@ -44,12 +39,6 @@ describe 'meetbot module', ->
   beforeEach ->
     room = helper.createRoom { httpd: false }
     room.robot.logger.error = sinon.stub()
-
-    # room.receive = (userName, message) ->
-    #   new Promise (resolve) =>
-    #     @messages.push [userName, message]
-    #     user = room.robot.brain.userForId userName
-    #     @robot.receive(new Hubot.TextMessage(user, message), resolve)
 
 # --------------------------------------------------------------------------------------------------
   context 'meetbot robot launch', ->
@@ -297,3 +286,62 @@ describe 'meetbot module', ->
         it 'should warn that no meeting is ongoing', ->
           expect(hubotResponseCount()).to.eql 1
           expect(hubotResponse()).to.eq 'There is no ongoing meeting here.'
+
+# --------------------------------------------------------------------------------------------------
+  context 'permissions system', ->
+    beforeEach ->
+      process.env.HUBOT_AUTH_ADMIN = 'admin_user,U00000000'
+      room.robot.loadFile path.resolve('node_modules/hubot-auth/src'), 'auth.coffee'
+      room.robot.brain.userForId 'U00000000', {
+        id: 'U00000000',
+        name: 'admin_user'
+      }
+      room.robot.brain.userForId 'UXXXXXXXX', {
+        id: 'UXXXXXXXX',
+        name: 'normal_user'
+      }
+
+    context 'user wants to know if a meeting is going on', ->
+      context 'there is no meeting going on', ->
+        beforeEach ->
+          room.robot.brain.data.meetbot = { }
+          room.robot.brain.emit 'loaded'
+
+        context 'meet', ->
+          hubot 'meet', 'UXXXXXXXX'
+          it 'should explain that there is no meeting', ->
+            expect(hubotResponseCount()).to.eql 1
+            expect(hubotResponse()).to.eq 'There is no meeting going on right now on this channel.'
+
+    context 'normal user starts a new meeting', ->
+      beforeEach ->
+        room.robot.brain.data.meetbot = { }
+      afterEach ->
+        room.robot.brain.data.meetbot = { }
+
+      context 'meet start', ->
+        beforeEach ->
+          @now = moment().utc().format('HH:mm')
+        hubot 'meet start', 'UXXXXXXXX'
+        it 'should deny permission to the user', ->
+          expect(hubotResponseCount()).to.eql 1
+          expect(hubotResponse())
+          .to.eq "You don't have permission to do that."
+
+
+    context 'admin user starts a new meeting', ->
+      beforeEach ->
+        room.robot.brain.data.meetbot = { }
+      afterEach ->
+        room.robot.brain.data.meetbot = { }
+
+      context 'meet start', ->
+        beforeEach ->
+          @now = moment().utc().format('HH:mm')
+        hubot 'meet start new meeting', 'U00000000'
+        it 'should deny permission to the user', ->
+          expect(hubotResponseCount()).to.eql 1
+          expect(hubotResponse())
+          .to.eq 'Meeting `new meeting` is now open. All discussions will now be recorded.'
+
+# --------------------------------------------------------------------------------------------------
