@@ -59,8 +59,15 @@ module.exports = (robot) ->
         robot.logger.error e
 
   robot.respond /meet show/, (res) ->
-    room = res.envelope.room
-    gitlab.formatData(robot.brain.data.meetbot[room])
+    gitlab.formatData(robot.brain.data.meetbot[res.envelope.room])
     .then (text) ->
       res.send "```\n#{text}\n```"
     res.finish()
+
+  robot.respond /meet gitlab id/, (res) ->
+    if process.env.MEETBOT_GITLAB_REPO and
+    process.env.MEETBOT_GITLAB_URL and
+    process.env.MEETBOT_GITLAB_APIKEY
+      gitlab.getRepoId(process.env.MEETBOT_GITLAB_REPO)
+      .then (repoId) ->
+        res.send "repoId: #{repoId}"

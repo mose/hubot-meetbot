@@ -34,14 +34,18 @@ If hubot-auth is not loaded, all users can access those commands. You can use th
 
 It's also advised to use a brain persistence plugin, whatever it is, to persist ongoing meeting sessions between restarts.
 
+Giltab storage
+-------------------
+
 When meeting is over and closed, the minutes will be emitted as a `meetbot.notes` event. For my immediate needs I have added a gitlab process to create a MR with the minutes in there, but later on other processors could be added (github, etherpad, mail, etc). In order for the processor to be functional, those 3 env variables have to be set:
 
 - `MEETBOT_GITLAB_URL`
 - `MEETBOT_GITLAB_APIKEY`
 - `MEETBOT_GITLAB_REPO`
-- `MEETBOT_GITLAB_FILEPATH` and `MEETBOT_GITLAB_DATEFORMAT` - 
-    used to build the file name. optional. default is `minutes/%s-%s.md` and `YYYY-MM-DD`.  
-    format `MEETBOT_GITLAB_FILEPATH` gets `MEETBOT_GITLAB_DATEFORMAT` and meeting label as arguments
+- `MEETBOT_GITLAB_DATEFORMAT` default is `YYYY-MM-DD`
+- `MEETBOT_GITLAB_FILEPATH` default is `minutes/%s-%s.md, the 2 arguments are `MEETBOT_GITLAB_DATEFORMAT` and meeting label
+
+Note: the code is only going to work with the API v4 of gitlab, so Gitlab version needs to be > 9.0
 
 Commands
 --------------

@@ -70,7 +70,7 @@ class Meetbot
       if @data[room]
         label = @data[room].label
         @data[room].end = moment().utc().format()
-        # @robot.emit 'meetbot.notes', @data[room]
+        @robot.emit 'meetbot.notes', @data[room]
         delete @data[room]
         res label
       else

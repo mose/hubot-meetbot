@@ -37,7 +37,7 @@ class Gitlab
   get: (endpoint) =>
     return new Promise (res, err) =>
       @robot.http(@url)
-        .path("api/v3/#{endpoint}")
+        .path("api/v4/#{endpoint}")
         .header('PRIVATE-TOKEN', @apikey)
         .get() (error, result, payload) ->
           if error
@@ -51,7 +51,7 @@ class Gitlab
   post: (endpoint, body) =>
     return new Promise (res, err) =>
       @robot.http(@url)
-        .path("api/v3/#{endpoint}")
+        .path("api/v4/#{endpoint}")
         .header('PRIVATE-TOKEN', @apikey)
         .post(body) (error, result, payload) ->
           if error
@@ -67,16 +67,14 @@ class Gitlab
       if @robot.brain.data.gitlab.repos[repo]
         res @robot.brain.data.gitlab.repos[repo]
       else
-        endpoint = 'projects/search/' + repo + '?per_page=100'
+        endpoint = 'projects/' + encodeURIComponent(repo)
         @get(endpoint)
         .then (json_body) =>
-          for p in json_body
-            if p.path_with_namespace is repo
-              @robot.brain.data.gitlab.repos[repo] = p.id
-              res p.id
-              break
-          unless @robot.brain.data.gitlab.repos[repo]
-            err "Repo #{repo} not found"
+          if json_body.id
+            @robot.brain.data.gitlab.repos[repo] = json_body.id
+            res json_body.id
+          else
+            err "Repo #{repo} not found."
         .catch (e) ->
           err e
 
