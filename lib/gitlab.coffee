@@ -155,7 +155,6 @@ class Gitlab
           @pad(line.user, namewidth + 2),
           line.text
       back += '\n\n*EOF*\n'
-      console.log back
       res back
 
   point: (data, label) ->
