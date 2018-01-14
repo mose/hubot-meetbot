@@ -10,6 +10,7 @@
 #   mose
 
 Gitlab  = require '../lib/gitlab'
+moment = require 'moment'
 
 module.exports = (robot) ->
 
@@ -71,3 +72,25 @@ module.exports = (robot) ->
       gitlab.getRepoId(process.env.MEETBOT_GITLAB_REPO)
       .then (repoId) ->
         res.send "repoId: #{repoId}"
+
+  robot.respond /meet gitlab createfile/, (res) ->
+    if process.env.MEETBOT_GITLAB_REPO and
+    process.env.MEETBOT_GITLAB_URL and
+    process.env.MEETBOT_GITLAB_APIKEY
+      repoId = null
+      gitlab.getRepoId(process.env.MEETBOT_GITLAB_REPO)
+      .bind(repoId)
+      .then (@repoId) ->
+        res.send "repoId: #{@repoId}"
+        data = {
+          end: moment().utc().format()
+          label: "test minutes"
+        }
+        text = "sample text"
+        gitlab.createFile(@repoId, 'master', data.end, data.label, text)
+      .then (json) ->
+        console.log json
+        robot.logger.info json
+        res.send "Done."
+      .catch (e) ->
+        robot.logger.error e

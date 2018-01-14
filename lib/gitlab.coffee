@@ -82,7 +82,7 @@ class Gitlab
   #   return new Promise (res, err) =>
   #     query = { }
   #     query.id = repoId
-  #     query.branch_name = branchName
+  #     query.branch = branchName
   #     query.ref = 'master'
   #     body = querystring.stringify(query)
   #     endpoint = "projects/#{repoId}/repository/branches"
@@ -92,7 +92,7 @@ class Gitlab
   #     .catch (e) ->
   #       err e
 
-  createFile: (repoId, branchname, date, label, text) ->
+  createFile: (repoId, branchName, date, label, text) ->
     return new Promise (res, err) =>
       filetitle = text
         .slice(0, text.indexOf('\n'))
@@ -101,16 +101,15 @@ class Gitlab
       filepath = util.format(
         process.env.MEETBOT_GITLAB_FILEPATH,
         moment(date).format(process.env.MEETBOT_GITLAB_DATEFORMAT),
-        label
+        label.replace(/\s/,'-')
       )
       query = { }
-      query.branch_name = branchName
+      query.branch = branchName
       query.content = text
-      query.file_path = filepath
       query.commit_message = 'Meetbot minutes'
       body = querystring.stringify(query)
-      endpoint = "projects/#{repoId}/repository/files"
-      @post(endpoint)
+      endpoint = "projects/#{repoId}/repository/files/" + encodeURIComponent(filepath)
+      @post(endpoint, body)
       .then (json_body) ->
         res json_body
       .catch (e) ->
