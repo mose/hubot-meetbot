@@ -47,7 +47,7 @@ module.exports = (robot) ->
     process.env.MEETBOT_GITLAB_URL and
     process.env.MEETBOT_GITLAB_APIKEY
       repoId = null
-      branch = process.env.MEETBOT_GITLAB_BRANCH || 'master'
+      branch = process.env.MEETBOT_GITLAB_BRANCH or 'master'
       gitlab.getRepoId(process.env.MEETBOT_GITLAB_REPO)
       .bind(repoId)
       .then (@repoId) ->
@@ -59,7 +59,7 @@ module.exports = (robot) ->
         # console.log json
         robot.logger.info json
         robot.messageRoom data.room, util.format(
-          "Done: %s/%s/blob/%s/%s",
+          'Done: %s/%s/blob/%s/%s',
           process.env.MEETBOT_GITLAB_URL,
           process.env.MEETBOT_GITLAB_REPO,
           branch,
@@ -70,11 +70,11 @@ module.exports = (robot) ->
 
 # debug code
 
-  # robot.respond /meet show/, (res) ->
-  #   gitlab.formatData(robot.brain.data.meetbot[res.envelope.room])
-  #   .then (text) ->
-  #     res.send "```\n#{text}\n```"
-  #   res.finish()
+  robot.respond /meet show/, (res) ->
+    gitlab.formatData(robot.brain.data.meetbot[res.envelope.room])
+    .then (text) ->
+      res.send "```\n#{text}\n```"
+    res.finish()
 
   # robot.respond /meet gitlab id/, (res) ->
   #   if process.env.MEETBOT_GITLAB_REPO and
@@ -105,4 +105,3 @@ module.exports = (robot) ->
   #       res.send "Done."
   #     .catch (e) ->
   #       robot.logger.error e
-
