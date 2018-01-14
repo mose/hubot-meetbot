@@ -69,6 +69,7 @@ class Meetbot
     return new Promise (res, err) =>
       if @data[room]
         label = @data[room].label
+        @data[room].room = room
         @data[room].end = moment().utc().format()
         @robot.emit 'meetbot.notes', @data[room]
         delete @data[room]
