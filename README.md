@@ -39,11 +39,12 @@ Giltab storage
 
 When meeting is over and closed, the minutes will be emitted as a `meetbot.notes` event. For my immediate needs I have added a gitlab process to create a MR with the minutes in there, but later on other processors could be added (github, etherpad, mail, etc). In order for the processor to be functional, those 3 env variables have to be set:
 
-- `MEETBOT_GITLAB_URL`
-- `MEETBOT_GITLAB_APIKEY`
-- `MEETBOT_GITLAB_REPO`
-- `MEETBOT_GITLAB_DATEFORMAT` default is `YYYY-MM-DD`
-- `MEETBOT_GITLAB_FILEPATH` default is `minutes/%s-%s.md, the 2 arguments are `MEETBOT_GITLAB_DATEFORMAT` and meeting label
+- `MEETBOT_GITLAB_URL` (required)
+- `MEETBOT_GITLAB_APIKEY` (required)
+- `MEETBOT_GITLAB_REPO` (required)
+- `MEETBOT_GITLAB_BRANCH` (optional) default is `master`
+- `MEETBOT_GITLAB_DATEFORMAT` (optional) default is `YYYY-MM-DD`
+- `MEETBOT_GITLAB_FILEPATH` (optional) default is `minutes/%s-%s.md, the 2 arguments are `MEETBOT_GITLAB_DATEFORMAT` and meeting label
 
 Note: the code is only going to work with the API v4 of gitlab, so Gitlab version needs to be > 9.0
 
@@ -92,6 +93,10 @@ Commands prefixed by `.` are here taking in account we use the `.` as hubot pref
     .meet action <text>
     .action <text>
         Add an ACTION item to the minutes
+
+    .meet show
+        Displays the minutes without closing the meeting.
+        Mostly for debug purposes.
 
 
 Testing

@@ -184,7 +184,6 @@ class Gitlab
         timespent
         )
 
-
   pad: (string, targetLength) ->
     targetLength = targetLength >> 0
     padString = ' '
