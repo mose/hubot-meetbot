@@ -27,6 +27,20 @@ dataIncompleteSample = require './sample/data-sample-incomplete.json'
 dataIncompleteOutput = require './sample/data-sample-incomplete-output.json'
 
 # --------------------------------------------------------------------------------------------------
+describe 'unconfigured meetbot module', ->
+
+  context 'something emits a meetbot.notes event', ->
+    beforeEach ->
+      room = helper.createRoom { httpd: false }
+      room.robot.logger = sinon.spy()
+      room.robot.logger.info = sinon.spy()
+      room.robot.logger.error = sinon.spy()
+    it 'does not do anything', ->
+      expect(room.robot.logger.error).not.called
+      expect(room.robot.logger.info).not.called
+      expect(room.messages).not.to.be.defined
+
+# --------------------------------------------------------------------------------------------------
 describe 'meetbot module', ->
 
   hubotHear = (message, userName = 'momo', tempo = 40) ->
@@ -172,7 +186,7 @@ describe 'meetbot module', ->
           .to.eq 'Done: http://example.com/meetings/blob/master/' +
                  'minutes/2018-01-14-standup%20meeting%20sample.md'
 
-    context 'but an error happens on a post', ->
+    context 'but a http error happens on a post', ->
       beforeEach (done) ->
         room.robot.logger = sinon.spy()
         room.robot.logger.info = sinon.spy()
@@ -194,7 +208,29 @@ describe 'meetbot module', ->
         expect(room.robot.logger.error).calledOnce
         expect(room.robot.logger.error).calledWith 'http error 500'
 
-    context 'but an error happens on a get', ->
+    context 'but an error happens on a post', ->
+      beforeEach (done) ->
+        room.robot.logger = sinon.spy()
+        room.robot.logger.info = sinon.spy()
+        room.robot.logger.error = sinon.spy()
+        room.robot.brain.data.gitlab.repos[process.env.MEETBOT_GITLAB_REPO] = 42
+        do nock.disableNetConnect
+        nock(process.env.MEETBOT_GITLAB_URL)
+          .post('/api/v4/projects/42/repository/files/' +
+                'minutes%2F2018-01-14-standup%20meeting%20sample.md')
+          .replyWithError({ 'message': 'Internet down.' })
+        room.robot.emit 'meetbot.notes', payloadSample
+        setTimeout (done), 50
+
+      afterEach ->
+        delete room.robot.brain.data.gitlab
+        nock.cleanAll()
+
+      it 'logs a success', ->
+        expect(room.robot.logger.error).calledOnce
+        expect(room.robot.logger.error).calledWith { 'message': 'Internet down.' }
+
+    context 'but an http error happens on a get', ->
       beforeEach (done) ->
         room.robot.logger = sinon.spy()
         room.robot.logger.info = sinon.spy()
@@ -213,6 +249,26 @@ describe 'meetbot module', ->
       it 'logs a success', ->
         expect(room.robot.logger.error).calledOnce
         expect(room.robot.logger.error).calledWith 'http error 500'
+
+    context 'but an error happens on a get', ->
+      beforeEach (done) ->
+        room.robot.logger = sinon.spy()
+        room.robot.logger.info = sinon.spy()
+        room.robot.logger.error = sinon.spy()
+        do nock.disableNetConnect
+        nock(process.env.MEETBOT_GITLAB_URL)
+          .get('/api/v4/projects/' + process.env.MEETBOT_GITLAB_REPO)
+          .replyWithError({ 'message': 'Internet down.' })
+        room.robot.emit 'meetbot.notes', payloadSample
+        setTimeout (done), 50
+
+      afterEach ->
+        delete room.robot.brain.data.gitlab
+        nock.cleanAll()
+
+      it 'logs a success', ->
+        expect(room.robot.logger.error).calledOnce
+        expect(room.robot.logger.error).calledWith { 'message': 'Internet down.' }
 
     context 'but an error happens when finding the repo id', ->
       beforeEach (done) ->

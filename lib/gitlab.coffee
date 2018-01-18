@@ -29,12 +29,6 @@ class Gitlab
     @robot.brain.on 'loaded', storageLoaded
     storageLoaded() # just in case storage was loaded before we got here
 
-  ready: ->
-    @robot.logger.error 'Error: Gitlab url is not specified' if not @env.MEETBOT_GITLAB_URL
-    @robot.logger.error 'Error: Gitlab api key is not specified' if not @env.MEETBOT_GITLAB_APIKEY
-    return false unless (@env.MEETBOT_GITLAB_URL and @env.MEETBOT_GITLAB_APIKEY)
-    true
-
   get: (endpoint) =>
     return new Promise (res, err) =>
       @robot.http(@url)
