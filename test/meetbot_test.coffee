@@ -17,7 +17,7 @@ moment = require 'moment'
 expect = require('chai').use(require('sinon-chai')).expect
 
 room = null
-meetData = require './sample/meetdata-empty.json'
+meetData = require './sample/data-empty.json'
 
 # --------------------------------------------------------------------------------------------------
 describe 'meetbot module', ->

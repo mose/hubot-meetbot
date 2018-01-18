@@ -100,7 +100,7 @@ class Gitlab
         .replace(/^[0-9]{1,8}/, '')
       filepath = util.format(
         process.env.MEETBOT_GITLAB_FILEPATH,
-        moment(date).format(process.env.MEETBOT_GITLAB_DATEFORMAT),
+        moment(date).format(process.env.MEETBOT_GITLAB_DATEFORMAT or 'YYYY-MM-DD'),
         label
       )
       query = { }
@@ -191,7 +191,7 @@ class Gitlab
     else
       targetLength = targetLength - string.length
       if targetLength > padString.length
-        padString += padString.repeat(targetLength / padString.length)
+        padString += Array(targetLength / padString.length).join(padString)
       padString.slice(0, targetLength) + string
 
 
