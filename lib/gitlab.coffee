@@ -182,8 +182,7 @@ class Gitlab
     targetLength = targetLength >> 0
     padString = ' '
     targetLength = targetLength - string.length
-    if targetLength > padString.length
-      padString += Array(targetLength / padString.length).join(padString)
+    padString += Array(targetLength / padString.length).join(padString)
     padString.slice(0, targetLength) + string
 
 
