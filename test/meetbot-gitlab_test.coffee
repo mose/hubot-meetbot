@@ -29,15 +29,21 @@ dataIncompleteOutput = require './sample/data-sample-incomplete-output.json'
 # --------------------------------------------------------------------------------------------------
 describe 'unconfigured meetbot module', ->
 
+  beforeEach ->
+    room = helper.createRoom { httpd: false }
+    room.robot.logger = sinon.spy()
+    room.robot.logger.info = sinon.spy()
+    room.robot.logger.error = sinon.spy()
+
   context 'something emits a meetbot.notes event', ->
-    beforeEach ->
-      room = helper.createRoom { httpd: false }
-      room.robot.logger = sinon.spy()
-      room.robot.logger.info = sinon.spy()
-      room.robot.logger.error = sinon.spy()
+    beforeEach (done) ->
+      room.robot.emit 'meetbot.notes', { }
+      setTimeout (done), 50
+      
     it 'does not do anything', ->
       expect(room.robot.logger.error).not.called
-      expect(room.robot.logger.info).not.called
+      expect(room.robot.logger.info).calledOnce
+      expect(room.robot.logger.info).calledWith 'GitLab not configured, skiping ...'
       expect(room.messages).not.to.be.defined
 
 # --------------------------------------------------------------------------------------------------

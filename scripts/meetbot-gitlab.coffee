@@ -43,9 +43,9 @@ module.exports = (robot) ->
   #       robot.logger.error e
 
   robot.on 'meetbot.notes', (data) ->
-    if process.env.MEETBOT_GITLAB_REPO and
-    process.env.MEETBOT_GITLAB_URL and
-    process.env.MEETBOT_GITLAB_APIKEY
+    if process.env.MEETBOT_GITLAB_REPO? and
+    process.env.MEETBOT_GITLAB_URL? and
+    process.env.MEETBOT_GITLAB_APIKEY?
       repoId = null
       branch = process.env.MEETBOT_GITLAB_BRANCH or 'master'
       gitlab.getRepoId(process.env.MEETBOT_GITLAB_REPO)
@@ -67,6 +67,8 @@ module.exports = (robot) ->
           )
       .catch (e) ->
         robot.logger.error e
+    else
+      robot.logger.info 'GitLab not configured, skiping ...'
 
 # debug code
 
