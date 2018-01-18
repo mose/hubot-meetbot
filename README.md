@@ -10,8 +10,6 @@ Hubot Meetbot Plugin
 
 This plugin is a clone of the famous Debian Meetbot https://wiki.debian.org/MeetBot, for use of teams on slack.
 
-*Work in progress* - this plugin is ready for use but still very experimental.
-
 
 Installation
 --------------
@@ -51,8 +49,6 @@ Note: the code is only going to work with the API v4 of gitlab, so Gitlab versio
 
 Commands
 --------------
-
-**Note: until version 1.0.0, this readme is a roadmap, not a real documentation. This is a Readme-driven development approach.**
 
 The commands are loosely inspired from http://meetbot.debian.net/Manual.html
 
