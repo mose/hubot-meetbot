@@ -172,7 +172,7 @@ describe 'meetbot module', ->
           .to.eq 'Done: http://example.com/meetings/blob/master/' +
                  'minutes/2018-01-14-standup%20meeting%20sample.md'
 
-    context 'but an error happens', ->
+    context 'but an error happens on a post', ->
       beforeEach (done) ->
         room.robot.logger = sinon.spy()
         room.robot.logger.info = sinon.spy()
@@ -193,3 +193,43 @@ describe 'meetbot module', ->
       it 'logs a success', ->
         expect(room.robot.logger.error).calledOnce
         expect(room.robot.logger.error).calledWith 'http error 500'
+
+    context 'but an error happens on a get', ->
+      beforeEach (done) ->
+        room.robot.logger = sinon.spy()
+        room.robot.logger.info = sinon.spy()
+        room.robot.logger.error = sinon.spy()
+        do nock.disableNetConnect
+        nock(process.env.MEETBOT_GITLAB_URL)
+          .get('/api/v4/projects/' + process.env.MEETBOT_GITLAB_REPO)
+          .reply(500, { })
+        room.robot.emit 'meetbot.notes', payloadSample
+        setTimeout (done), 50
+
+      afterEach ->
+        delete room.robot.brain.data.gitlab
+        nock.cleanAll()
+
+      it 'logs a success', ->
+        expect(room.robot.logger.error).calledOnce
+        expect(room.robot.logger.error).calledWith 'http error 500'
+
+    context 'but an error happens when finding the repo id', ->
+      beforeEach (done) ->
+        room.robot.logger = sinon.spy()
+        room.robot.logger.info = sinon.spy()
+        room.robot.logger.error = sinon.spy()
+        do nock.disableNetConnect
+        nock(process.env.MEETBOT_GITLAB_URL)
+          .get('/api/v4/projects/' + process.env.MEETBOT_GITLAB_REPO)
+          .reply(200, { })
+        room.robot.emit 'meetbot.notes', payloadSample
+        setTimeout (done), 50
+
+      afterEach ->
+        delete room.robot.brain.data.gitlab
+        nock.cleanAll()
+
+      it 'logs a success', ->
+        expect(room.robot.logger.error).calledOnce
+        expect(room.robot.logger.error).calledWith 'Repo meetings not found.'
