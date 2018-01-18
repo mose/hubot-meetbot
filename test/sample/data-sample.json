@@ -23,7 +23,7 @@
         },
         {
             "time": "2018-01-14T01:02:04Z",
-            "user": "user2",
+            "user": "someother",
             "text": ".info two info"
         }
     ]

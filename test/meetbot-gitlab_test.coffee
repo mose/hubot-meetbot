@@ -44,6 +44,7 @@ describe 'meetbot module', ->
     process.env.MEETBOT_GITLAB_APIKEY = 'xxx'
     process.env.MEETBOT_GITLAB_REPO = 'meetings'
     process.env.MEETBOT_GITLAB_FILEPATH = 'minutes/%s-%s.md'
+    process.env.MEETBOT_TZ = 'Asia/Taipei'
     room = helper.createRoom { httpd: false }
     room.robot.logger.error = sinon.stub()
 
@@ -52,6 +53,7 @@ describe 'meetbot module', ->
     delete process.env.MEETBOT_GITLAB_APIKEY
     delete process.env.MEETBOT_GITLAB_REPO
     delete process.env.MEETBOT_GITLAB_FILEPATH
+    delete process.env.MEETBOT_TZ
 
     # room.receive = (userName, message) ->
     #   new Promise (resolve) =>

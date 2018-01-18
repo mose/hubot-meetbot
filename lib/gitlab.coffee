@@ -11,7 +11,7 @@
 #   mose
 
 querystring = require 'querystring'
-moment = require 'moment'
+moment = require 'moment-timezone'
 util = require 'util'
 Promise = require 'bluebird'
 
@@ -20,6 +20,7 @@ class Gitlab
     @url = env.MEETBOT_GITLAB_URL
     @apikey = env.MEETBOT_GITLAB_APIKEY
     @env = env
+    @tz = @env.MEETBOT_TZ or 'UTC'
     storageLoaded = =>
       @storage = @robot.brain.data.gitlab ||= {
         repos: { }
@@ -136,7 +137,7 @@ class Gitlab
       if data.topic
         back += "#{data.topic}\n"
       else
-        back += 'Metting of ' + moment(data.start).format('YYYY-MM-DD HH:mm') + '\n'
+        back += 'Metting of ' + moment.tz(data.start, @tz).format('YYYY-MM-DD HH:mm') + '\n'
       back += '================================\n\n'
       unless data.end
         data.end = moment().utc().format()
@@ -151,7 +152,7 @@ class Gitlab
       , 0
       for line in data.logs
         back += util.format '\n    %s %s : %s',
-          moment(line.time).format('HH:mm'),
+          moment.tz(line.time, @tz).format('HH:mm'),
           @pad(line.user, namewidth + 2),
           line.text
       back += '\n\n*EOF*\n'
@@ -169,17 +170,17 @@ class Gitlab
 
   fromto: (start, end) ->
     timespent = moment(end).diff(start, 'minutes')
-    if moment(start).format('YYYY-MM-DD') is moment(end).format('YYYY-MM-DD')
+    if moment.tz(start, @tz).format('YYYY-MM-DD') is moment.tz(end, @tz).format('YYYY-MM-DD')
       util.format('On %s from %s to %s (%s minutes)\n\n',
-        moment(start).format('YYYY-MM-DD'),
-        moment(start).format('HH:mm'),
+        moment.tz(start, @tz).format('YYYY-MM-DD'),
+        moment.tz(start, @tz).format('HH:mm'),
         moment(end).format('HH:mm'),
         timespent
         )
     else
       util.format('From %s to %s (%s minutes)\n\n',
-        moment(start).format('YYYY-MM-DD HH:mm'),
-        moment(end).format('YYYY-MM-DD HH:mm'),
+        moment.tz(start, @tz).format('YYYY-MM-DD HH:mm'),
+        moment.tz(end, @tz).format('YYYY-MM-DD HH:mm'),
         timespent
         )
 
