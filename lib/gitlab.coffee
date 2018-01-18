@@ -174,7 +174,7 @@ class Gitlab
       util.format('On %s from %s to %s (%s minutes)\n\n',
         moment.tz(start, @tz).format('YYYY-MM-DD'),
         moment.tz(start, @tz).format('HH:mm'),
-        moment(end).format('HH:mm'),
+        moment.tz(end, @tz).format('HH:mm'),
         timespent
         )
     else

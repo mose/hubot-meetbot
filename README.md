@@ -31,6 +31,7 @@ If hubot-auth is not loaded, all users can access those commands. You can use th
 
 - `MEETBOT_NOAUTH` - if defined, it will bypass the need to be admin to use the meetbot admin commands
 - `MEETBOT_AUTH_GROUP` - if defined it will permit group specified to use the meetbot admin commands
+- `MEETBOT_TZ` - will be used for displaying the output times and dates according to the timezone. If not set, it will use UTC.
 
 It's also advised to use a brain persistence plugin, whatever it is, to persist ongoing meeting sessions between restarts.
 
