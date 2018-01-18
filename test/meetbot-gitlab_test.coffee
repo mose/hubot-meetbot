@@ -172,7 +172,7 @@ describe 'meetbot module', ->
           .to.eq 'Done: http://example.com/meetings/blob/master/' +
                  'minutes/2018-01-14-standup%20meeting%20sample.md'
 
-    context.only 'but an error happens', ->
+    context 'but an error happens', ->
       beforeEach (done) ->
         room.robot.logger = sinon.spy()
         room.robot.logger.info = sinon.spy()
