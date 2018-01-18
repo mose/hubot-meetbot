@@ -1,9 +1,9 @@
 {
-    "room": "room1",
+  "room1": {
     "label": "standup meeting sample",
     "topic": "a topic",
     "start": "2018-01-14T01:01:20Z",
-    "end": "2018-01-14T01:04:20Z",
+    "end": "2018-01-14T01:12:20Z",
     "info": [
         "one info",
         "two info"
@@ -27,4 +27,5 @@
             "text": ".info two info"
         }
     ]
+  }
 }

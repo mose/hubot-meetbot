@@ -19,9 +19,16 @@ expect = require('chai').use(require('sinon-chai')).expect
 
 room = null
 payloadSample = require './sample/payload-sample.json'
+dataSample = require './sample/data-sample.json'
+dataOutput = require './sample/data-sample-output.json'
 
 # --------------------------------------------------------------------------------------------------
 describe 'meetbot module', ->
+
+  hubotHear = (message, userName = 'momo', tempo = 40) ->
+    beforeEach (done) ->
+      room.user.say userName, message
+      setTimeout (done), tempo
 
   hubot = (message, userName = 'momo') ->
     hubotHear "@hubot #{message}", userName
@@ -51,6 +58,21 @@ describe 'meetbot module', ->
     #     @messages.push [userName, message]
     #     user = room.robot.brain.userForId userName
     #     @robot.receive(new Hubot.TextMessage(user, message), resolve)
+
+# --------------------------------------------------------------------------------------------------
+  context 'user wants to know the content of current meeting nminutes', ->
+    beforeEach ->
+      room.robot.brain.data.meetbot = dataSample
+      room.robot.brain.emit 'loaded'
+
+    afterEach ->
+      room.robot.brain.data.meetbot = { }
+
+    context 'meet show', ->
+      hubot 'meet show'
+      it 'should reply the bulk of minutes log', ->
+        expect(hubotResponseCount()).to.eql 1
+        expect(hubotResponse()).to.eq dataOutput.payload
 
 # --------------------------------------------------------------------------------------------------
   context 'something emits a meetbot.notes event', ->
