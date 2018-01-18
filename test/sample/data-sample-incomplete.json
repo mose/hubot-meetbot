@@ -1,0 +1,31 @@
+{
+  "room1": {
+    "label": "standup meeting sample",
+    "topic": false,
+    "start": "2018-01-14T01:01:20Z",
+    "end": false,
+    "info": [
+        "one info",
+        "two info"
+    ],
+    "action": [ ],
+    "agreed": [ ],
+    "logs": [
+        {
+            "time": "2018-01-14T01:01:40Z",
+            "user": "user1",
+            "text": "alors"
+        },
+        {
+            "time": "2018-01-14T01:01:50Z",
+            "user": "someother",
+            "text": ".info one info"
+        },
+        {
+            "time": "2018-01-14T01:02:04Z",
+            "user": "user1",
+            "text": ".info two info"
+        }
+    ]
+  }
+}

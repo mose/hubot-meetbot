@@ -23,6 +23,8 @@ dataSample = require './sample/data-sample.json'
 dataOutput = require './sample/data-sample-output.json'
 dataAnotherdaySample = require './sample/data-sample-anotherday.json'
 dataAnotherdayOutput = require './sample/data-sample-anotherday-output.json'
+dataIncompleteSample = require './sample/data-sample-incomplete.json'
+dataIncompleteOutput = require './sample/data-sample-incomplete-output.json'
 
 # --------------------------------------------------------------------------------------------------
 describe 'meetbot module', ->
@@ -90,6 +92,24 @@ describe 'meetbot module', ->
         hubot 'meet show'
         it 'should reply the bulk of minutes log', ->
           expect(hubotResponse()).to.eq dataAnotherdayOutput.payload
+
+    context 'with an incomplete payload', ->
+      beforeEach ->
+        @clock = sinon.useFakeTimers({
+          now: 1515892340000,
+          toFake: ['Date']
+        })
+        room.robot.brain.data.meetbot = dataIncompleteSample
+        room.robot.brain.emit 'loaded'
+
+      afterEach ->
+        @clock.restore()
+        room.robot.brain.data.meetbot = { }
+
+      context 'meet show', ->
+        hubot 'meet show'
+        it 'should reply the bulk of minutes log', ->
+          expect(hubotResponse()).to.eq dataIncompleteOutput.payload
 
 # --------------------------------------------------------------------------------------------------
   context 'something emits a meetbot.notes event', ->
