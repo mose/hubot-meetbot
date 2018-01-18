@@ -2,8 +2,8 @@
   "room1": {
     "label": "standup meeting sample",
     "topic": "a topic",
-    "start": "2018-01-14T01:01:20Z",
-    "end": "2018-01-14T01:12:20Z",
+    "start": "2018-01-15T15:50:20Z",
+    "end": "2018-01-15T16:12:20Z",
     "info": [
         "one info",
         "two info"
@@ -12,17 +12,17 @@
     "agreed": [ ],
     "logs": [
         {
-            "time": "2018-01-14T01:01:40Z",
+            "time": "2018-01-15T16:01:40Z",
             "user": "user1",
             "text": "alors"
         },
         {
-            "time": "2018-01-14T01:01:50Z",
+            "time": "2018-01-15T16:01:50Z",
             "user": "someother",
             "text": ".info one info"
         },
         {
-            "time": "2018-01-14T01:02:04Z",
+            "time": "2018-01-15T16:02:04Z",
             "user": "user1",
             "text": ".info two info"
         }

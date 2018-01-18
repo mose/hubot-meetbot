@@ -21,6 +21,8 @@ room = null
 payloadSample = require './sample/payload-sample.json'
 dataSample = require './sample/data-sample.json'
 dataOutput = require './sample/data-sample-output.json'
+dataAnotherdaySample = require './sample/data-sample-anotherday.json'
+dataAnotherdayOutput = require './sample/data-sample-anotherday-output.json'
 
 # --------------------------------------------------------------------------------------------------
 describe 'meetbot module', ->
@@ -63,17 +65,31 @@ describe 'meetbot module', ->
 
 # --------------------------------------------------------------------------------------------------
   context 'user wants to know the content of current meeting minutes', ->
-    beforeEach ->
-      room.robot.brain.data.meetbot = dataSample
-      room.robot.brain.emit 'loaded'
+    context 'with a normal payload, meeting happening on same day', ->
+      beforeEach ->
+        room.robot.brain.data.meetbot = dataSample
+        room.robot.brain.emit 'loaded'
 
-    afterEach ->
-      room.robot.brain.data.meetbot = { }
+      afterEach ->
+        room.robot.brain.data.meetbot = { }
 
-    context 'meet show', ->
-      hubot 'meet show'
-      it 'should reply the bulk of minutes log', ->
-        expect(hubotResponse()).to.eq dataOutput.payload
+      context 'meet show', ->
+        hubot 'meet show'
+        it 'should reply the bulk of minutes log', ->
+          expect(hubotResponse()).to.eq dataOutput.payload
+
+    context 'with a normal payload, meeting happening over 2 days', ->
+      beforeEach ->
+        room.robot.brain.data.meetbot = dataAnotherdaySample
+        room.robot.brain.emit 'loaded'
+
+      afterEach ->
+        room.robot.brain.data.meetbot = { }
+
+      context 'meet show', ->
+        hubot 'meet show'
+        it 'should reply the bulk of minutes log', ->
+          expect(hubotResponse()).to.eq dataAnotherdayOutput.payload
 
 # --------------------------------------------------------------------------------------------------
   context 'something emits a meetbot.notes event', ->
