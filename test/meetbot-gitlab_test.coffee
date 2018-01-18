@@ -62,7 +62,7 @@ describe 'meetbot module', ->
     #     @robot.receive(new Hubot.TextMessage(user, message), resolve)
 
 # --------------------------------------------------------------------------------------------------
-  context 'user wants to know the content of current meeting nminutes', ->
+  context 'user wants to know the content of current meeting minutes', ->
     beforeEach ->
       room.robot.brain.data.meetbot = dataSample
       room.robot.brain.emit 'loaded'
@@ -73,7 +73,6 @@ describe 'meetbot module', ->
     context 'meet show', ->
       hubot 'meet show'
       it 'should reply the bulk of minutes log', ->
-        expect(hubotResponseCount()).to.eql 1
         expect(hubotResponse()).to.eq dataOutput.payload
 
 # --------------------------------------------------------------------------------------------------
