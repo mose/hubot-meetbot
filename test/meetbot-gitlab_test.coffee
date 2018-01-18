@@ -116,7 +116,7 @@ describe 'meetbot module', ->
     it 'should know about meetbot.notes', ->
       expect(room.robot.events['meetbot.notes']).to.be.defined
 
-    context 'with a unknown project id, ', ->
+    context 'with a unknown project id', ->
       beforeEach (done) ->
         room.robot.logger = sinon.spy()
         room.robot.logger.info = sinon.spy()
@@ -144,7 +144,7 @@ describe 'meetbot module', ->
           .to.eq 'Done: http://example.com/meetings/blob/master/' +
                  'minutes/2018-01-14-standup%20meeting%20sample.md'
 
-    context 'with a known project id, ', ->
+    context 'with a known project id', ->
       beforeEach (done) ->
         room.robot.logger = sinon.spy()
         room.robot.logger.info = sinon.spy()
@@ -171,3 +171,25 @@ describe 'meetbot module', ->
         expect(room.messages[0][1])
           .to.eq 'Done: http://example.com/meetings/blob/master/' +
                  'minutes/2018-01-14-standup%20meeting%20sample.md'
+
+    context.only 'but an error happens', ->
+      beforeEach (done) ->
+        room.robot.logger = sinon.spy()
+        room.robot.logger.info = sinon.spy()
+        room.robot.logger.error = sinon.spy()
+        room.robot.brain.data.gitlab.repos[process.env.MEETBOT_GITLAB_REPO] = 42
+        do nock.disableNetConnect
+        nock(process.env.MEETBOT_GITLAB_URL)
+          .post('/api/v4/projects/42/repository/files/' +
+                'minutes%2F2018-01-14-standup%20meeting%20sample.md')
+          .reply(500, { })
+        room.robot.emit 'meetbot.notes', payloadSample
+        setTimeout (done), 50
+
+      afterEach ->
+        delete room.robot.brain.data.gitlab
+        nock.cleanAll()
+
+      it 'logs a success', ->
+        expect(room.robot.logger.error).calledOnce
+        expect(room.robot.logger.error).calledWith 'http error 500'

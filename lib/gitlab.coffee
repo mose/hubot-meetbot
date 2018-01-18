@@ -187,13 +187,10 @@ class Gitlab
   pad: (string, targetLength) ->
     targetLength = targetLength >> 0
     padString = ' '
-    if string.length > targetLength
-      string
-    else
-      targetLength = targetLength - string.length
-      if targetLength > padString.length
-        padString += Array(targetLength / padString.length).join(padString)
-      padString.slice(0, targetLength) + string
+    targetLength = targetLength - string.length
+    if targetLength > padString.length
+      padString += Array(targetLength / padString.length).join(padString)
+    padString.slice(0, targetLength) + string
 
 
 
