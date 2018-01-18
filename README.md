@@ -52,7 +52,7 @@ Commands
 
 The commands are loosely inspired from http://meetbot.debian.net/Manual.html
 
-Commands prefixed by `.` are here taking in account we use the `.` as hubot prefix, just replace it with your prefix if it is different. Uncommented commands are just not yet implemented.
+Commands prefixed by `.` are here taking in account we use the `.` as hubot prefix, just replace it with your prefix if it is different.
 
     .meet
         give the name of the ongoing meeting on the given channel
