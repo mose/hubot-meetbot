@@ -136,7 +136,7 @@ class Gitlab
       unless data.end
         data.end = moment().utc().format()
       back += @fromto(data.start, data.end)
-      for point in ['info', 'agreed', 'action']
+      for point in ['info', 'agreed', 'action', 'link']
         back += @point(data, point)
       back += 'Full log\n'
       back += '---------'

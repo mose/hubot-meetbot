@@ -1,6 +1,9 @@
 Hubot-meetbot Changelog
 ==========================
 
+### 1.0.0 - wip
+- add a `link` command to keep links
+
 ### 0.1.0 - 2018-01-19
 - handling timezones with MEETBOT_TZ env var
 - full test coverage

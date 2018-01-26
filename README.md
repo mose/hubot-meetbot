@@ -91,6 +91,10 @@ Commands prefixed by `.` are here taking in account we use the `.` as hubot pref
     .action <text>
         Add an ACTION item to the minutes
 
+    .meet link <text>
+    .link <text>
+        Add an LINK item to the minutes
+
     .meet show
         Displays the minutes without closing the meeting.
         Mostly for debug purposes.
