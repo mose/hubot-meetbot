@@ -248,6 +248,34 @@ describe 'meetbot module', ->
           expect(hubotResponse())
           .to.eq 'Action `some action` recorded for meeting `standup meeting`.'
 
+      # link
+      context 'meet link some link http://example.com', ->
+        afterEach ->
+          room.robot.meetbot.data.room1.logs = []
+        hubot 'meet link some link http://example.com'
+        it 'should record the new link', ->
+          expect(hubotResponseCount()).to.eql 1
+          expect(room.robot.meetbot.data.room1.logs.length).to.eql 1
+          expect(room.robot.meetbot.data.room1.link[0]).to.eql 'some link http://example.com'
+          expect(hubotResponse())
+          .to.eq 'Link `http://example.com` recorded for meeting `standup meeting`.'
+
+      context 'link some link http://example.com', ->
+        afterEach ->
+          room.robot.meetbot.data.room1.logs = []
+        hubot 'link some link http://example.com'
+        it 'should record the new link', ->
+          expect(hubotResponse())
+          .to.eq 'Link `http://example.com` recorded for meeting `standup meeting`.'
+
+      context 'link some link but no link', ->
+        afterEach ->
+          room.robot.meetbot.data.room1.logs = []
+        hubot 'link some link but no link'
+        it 'should record the new link', ->
+          expect(hubotResponse())
+          .to.eq "Sorry there is visibly no link in 'some link but no link'."
+
       # end
       context 'endmeeting', ->
         beforeEach ->

@@ -111,7 +111,7 @@ module.exports = (robot) ->
     text = res.match[1]
     meetbot.addLink(res.envelope.room, text)
     .then (data) ->
-      res.send "Link `#{data.url}` recorded for meeting `#{data.label}`."
+      res.send "Link `#{data.text}` recorded for meeting `#{data.label}`."
     .catch (e) ->
       res.send e
 

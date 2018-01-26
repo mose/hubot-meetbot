@@ -119,12 +119,16 @@ class Meetbot
 
   addLink: (room, text) ->
     return new Promise (res, err) =>
-      if @data[room]
-        @data[room].link ||= []
-        @data[room].link.push text
-        res { label: @data[room].label, text: text }
+      url = (text.match(/(https?:\/\/[^ ,\?!]*)/) or [])[0]
+      if url
+        if @data[room]
+          @data[room].link ||= []
+          @data[room].link.push text
+          res { label: @data[room].label, text: url }
+        else
+          err 'There is no ongoing meeting here.'
       else
-        err 'There is no ongoing meeting here.'
+        err "Sorry there is visibly no link in '#{text}'."
 
 
 
