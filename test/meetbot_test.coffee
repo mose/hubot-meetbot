@@ -334,6 +334,13 @@ describe 'meetbot module', ->
           expect(hubotResponseCount()).to.eql 1
           expect(hubotResponse()).to.eq 'There is no ongoing meeting here.'
 
+      # link
+      context 'meet link some link', ->
+        hubot 'meet link some link'
+        it 'should warn that no meeting is ongoing', ->
+          expect(hubotResponseCount()).to.eql 1
+          expect(hubotResponse()).to.eq 'There is no ongoing meeting here.'
+
       # end
       context 'endmeeting', ->
         hubot 'endmeeting'
