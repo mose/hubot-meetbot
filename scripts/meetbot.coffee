@@ -11,6 +11,7 @@
 #   hubot meet agree <text>
 #   hubot meet info <text>
 #   hubot meet action <text>
+#   hubot meet link <text containing link>
 #
 # Configuration:
 #   HUBOT_MEETBOT_NOAUTH
@@ -102,6 +103,15 @@ module.exports = (robot) ->
     meetbot.addAction(res.envelope.room, text)
     .then (data) ->
       res.send "Action `#{data.text}` recorded for meeting `#{data.label}`."
+    .catch (e) ->
+      res.send e
+
+#   hubot meet link <text containing link>
+  robot.respond /(?:meet )?link\s*(.*)?$/, (res) ->
+    text = res.match[1]
+    meetbot.addLink(res.envelope.room, text)
+    .then (data) ->
+      res.send "Link `#{data.url}` recorded for meeting `#{data.label}`."
     .catch (e) ->
       res.send e
 

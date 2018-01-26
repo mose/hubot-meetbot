@@ -61,6 +61,7 @@ class Meetbot
           info: []
           action: []
           agreed: []
+          link: []
           logs: []
         }
         res label
@@ -112,6 +113,15 @@ class Meetbot
     return new Promise (res, err) =>
       if @data[room]
         @data[room].action.push text
+        res { label: @data[room].label, text: text }
+      else
+        err 'There is no ongoing meeting here.'
+
+  addLink: (room, text) ->
+    return new Promise (res, err) =>
+      if @data[room]
+        @data[room].link ||= []
+        @data[room].link.push text
         res { label: @data[room].label, text: text }
       else
         err 'There is no ongoing meeting here.'
