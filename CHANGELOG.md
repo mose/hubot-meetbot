@@ -1,7 +1,10 @@
 Hubot-meetbot Changelog
 ==========================
 
-### 1.0.0 - wip
+### 1.0.1 - wip
+- some refactoring to prepare a github adapter
+
+### 1.0.0 - 2018-01-27
 - add a `link` command to keep links
 
 ### 0.1.0 - 2018-01-19

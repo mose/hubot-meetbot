@@ -10,6 +10,7 @@
 #   mose
 
 Gitlab  = require '../lib/gitlab'
+Format  = require '../lib/format'
 moment = require 'moment'
 util = require 'util'
 
@@ -17,6 +18,9 @@ module.exports = (robot) ->
 
   robot.gitlab ?= new Gitlab robot, process.env
   gitlab = robot.gitlab
+
+  robot.format ?= new Format process.env
+  format = robot.format
 
   # when branching and MR (v3, needs translation to v4)
   # robot.on 'meetbot.notes', (data) ->
@@ -51,7 +55,7 @@ module.exports = (robot) ->
       gitlab.getRepoId(process.env.MEETBOT_GITLAB_REPO)
       .bind(repoId)
       .then (@repoId) ->
-        gitlab.formatData(data)
+        format.markdown(data)
       .then (text) ->
         # console.log text
         gitlab.createFile(@repoId, branch, data.end, data.label, text)
@@ -73,7 +77,7 @@ module.exports = (robot) ->
 # debug code
 
   robot.respond /meet show/, (res) ->
-    gitlab.formatData(robot.brain.data.meetbot[res.envelope.room])
+    format.markdown(robot.brain.data.meetbot[res.envelope.room])
     .then (text) ->
       res.send "```\n#{text}\n```"
     res.finish()
