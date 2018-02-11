@@ -20,6 +20,7 @@
     "url": "https://github.com/mose/hubot-meetbot/issues"
   },
   "dependencies": {
+    "@octokit/rest": "^14.0.9",
     "bluebird": "^3.5.1",
     "moment": "^2.20.1",
     "moment-timezone": "^0.5.14"
