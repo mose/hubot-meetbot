@@ -15,6 +15,7 @@ moment = require 'moment-timezone'
 querystring = require 'querystring'
 util = require 'util'
 Promise = require 'bluebird'
+base64 = require('js-base64').Base64
 octokit = require('@octokit/rest')()
 
 class Github
@@ -37,10 +38,10 @@ class Github
       )
       octokit.repos.createFile({
         owner: 'octokit',
-        repo: 'rest.js',
-        path: 'blah.txt',
-        message: 'blah blah',
-        content: 'YmxlZXAgYmxvb3A='
+        repo: @repo,
+        path: filepath,
+        message: 'Meetbot minutes',
+        content: base64.encode(text)
       })
 
 
