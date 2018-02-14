@@ -76,12 +76,6 @@ module.exports = (robot) ->
 
 # debug code
 
-  robot.respond /meet show/, (res) ->
-    format.markdown(robot.brain.data.meetbot[res.envelope.room])
-    .then (text) ->
-      res.send "```\n#{text}\n```"
-    res.finish()
-
   # robot.respond /meet gitlab id/, (res) ->
   #   if process.env.MEETBOT_GITLAB_REPO and
   #   process.env.MEETBOT_GITLAB_URL and

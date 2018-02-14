@@ -18,6 +18,13 @@ expect = require('chai').use(require('sinon-chai')).expect
 
 room = null
 meetData = require './sample/data-empty.json'
+payloadSample = require './sample/payload-sample.json'
+dataSample = require './sample/data-sample.json'
+dataOutput = require './sample/data-sample-output.json'
+dataAnotherdaySample = require './sample/data-sample-anotherday.json'
+dataAnotherdayOutput = require './sample/data-sample-anotherday-output.json'
+dataIncompleteSample = require './sample/data-sample-incomplete.json'
+dataIncompleteOutput = require './sample/data-sample-incomplete-output.json'
 
 # --------------------------------------------------------------------------------------------------
 describe 'meetbot module', ->
@@ -37,8 +44,12 @@ describe 'meetbot module', ->
     room.messages?.length - 1
 
   beforeEach ->
+    process.env.MEETBOT_TZ = 'Asia/Taipei'
     room = helper.createRoom { httpd: false }
     room.robot.logger.error = sinon.stub()
+
+  afterEach ->
+    delete process.env.MEETBOT_TZ
 
 # --------------------------------------------------------------------------------------------------
   context 'meetbot robot launch', ->
@@ -288,6 +299,52 @@ describe 'meetbot module', ->
           # expect(room.robot.brain.data.meetbot).to.eql room1: { }
           expect(hubotResponse())
           .to.eq 'Closing meeting `standup meeting` ...'
+
+# --------------------------------------------------------------------------------------------------
+  context 'user wants to know the content of current meeting minutes', ->
+    context 'with a normal payload, meeting happening on same day', ->
+      beforeEach ->
+        room.robot.brain.data.meetbot = dataSample
+        room.robot.brain.emit 'loaded'
+
+      afterEach ->
+        room.robot.brain.data.meetbot = { }
+
+      context 'meet show md', ->
+        hubot 'meet show md'
+        it 'should reply the bulk of minutes log', ->
+          expect(hubotResponse()).to.eq dataOutput.payload
+
+    context 'with a normal payload, meeting happening over 2 days', ->
+      beforeEach ->
+        room.robot.brain.data.meetbot = dataAnotherdaySample
+        room.robot.brain.emit 'loaded'
+
+      afterEach ->
+        room.robot.brain.data.meetbot = { }
+
+      context 'meet show md', ->
+        hubot 'meet show md'
+        it 'should reply the bulk of minutes log', ->
+          expect(hubotResponse()).to.eq dataAnotherdayOutput.payload
+
+    context 'with an incomplete payload', ->
+      beforeEach ->
+        @clock = sinon.useFakeTimers({
+          now: 1515892340000,
+          toFake: ['Date']
+        })
+        room.robot.brain.data.meetbot = dataIncompleteSample
+        room.robot.brain.emit 'loaded'
+
+      afterEach ->
+        @clock.restore()
+        room.robot.brain.data.meetbot = { }
+
+      context 'meet show md', ->
+        hubot 'meet show md'
+        it 'should reply the bulk of minutes log', ->
+          expect(hubotResponse()).to.eq dataIncompleteOutput.payload
 
 # --------------------------------------------------------------------------------------------------
   context 'meeting is NOT started', ->

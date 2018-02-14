@@ -85,51 +85,6 @@ describe 'meetbot module', ->
     #     user = room.robot.brain.userForId userName
     #     @robot.receive(new Hubot.TextMessage(user, message), resolve)
 
-# --------------------------------------------------------------------------------------------------
-  context 'user wants to know the content of current meeting minutes', ->
-    context 'with a normal payload, meeting happening on same day', ->
-      beforeEach ->
-        room.robot.brain.data.meetbot = dataSample
-        room.robot.brain.emit 'loaded'
-
-      afterEach ->
-        room.robot.brain.data.meetbot = { }
-
-      context 'meet show', ->
-        hubot 'meet show'
-        it 'should reply the bulk of minutes log', ->
-          expect(hubotResponse()).to.eq dataOutput.payload
-
-    context 'with a normal payload, meeting happening over 2 days', ->
-      beforeEach ->
-        room.robot.brain.data.meetbot = dataAnotherdaySample
-        room.robot.brain.emit 'loaded'
-
-      afterEach ->
-        room.robot.brain.data.meetbot = { }
-
-      context 'meet show', ->
-        hubot 'meet show'
-        it 'should reply the bulk of minutes log', ->
-          expect(hubotResponse()).to.eq dataAnotherdayOutput.payload
-
-    context 'with an incomplete payload', ->
-      beforeEach ->
-        @clock = sinon.useFakeTimers({
-          now: 1515892340000,
-          toFake: ['Date']
-        })
-        room.robot.brain.data.meetbot = dataIncompleteSample
-        room.robot.brain.emit 'loaded'
-
-      afterEach ->
-        @clock.restore()
-        room.robot.brain.data.meetbot = { }
-
-      context 'meet show', ->
-        hubot 'meet show'
-        it 'should reply the bulk of minutes log', ->
-          expect(hubotResponse()).to.eq dataIncompleteOutput.payload
 
 # --------------------------------------------------------------------------------------------------
   context 'something emits a meetbot.notes event', ->

@@ -12,6 +12,7 @@
 #   hubot meet info <text>
 #   hubot meet action <text>
 #   hubot meet link <text containing link>
+#   hubot meet show md
 #
 # Configuration:
 #   HUBOT_MEETBOT_NOAUTH
@@ -21,12 +22,16 @@
 #   mose
 
 Meetbot = require '../lib/meetbotlib'
+Format  = require '../lib/format'
 path    = require 'path'
 
 module.exports = (robot) ->
 
   robot.meetbot ?= new Meetbot robot, process.env
   meetbot = robot.meetbot
+
+  robot.format ?= new Format process.env
+  format = robot.format
 
 #   hubot meet version
   robot.respond /meet version\s*$/, (res) ->
@@ -114,6 +119,13 @@ module.exports = (robot) ->
       res.send "Link `#{data.text}` recorded for meeting `#{data.label}`."
     .catch (e) ->
       res.send e
+
+#   hubot meet show md
+  robot.respond /meet show md/, (res) ->
+    format.markdown(robot.brain.data.meetbot[res.envelope.room])
+    .then (text) ->
+      res.send "```\n#{text}\n```"
+    res.finish()
 
 
   robot.hear /(.*)$/, (res) ->
