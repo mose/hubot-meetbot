@@ -19,12 +19,6 @@ expect = require('chai').use(require('sinon-chai')).expect
 
 room = null
 payloadSample = require './sample/payload-sample.json'
-dataSample = require './sample/data-sample.json'
-dataOutput = require './sample/data-sample-output.json'
-dataAnotherdaySample = require './sample/data-sample-anotherday.json'
-dataAnotherdayOutput = require './sample/data-sample-anotherday-output.json'
-dataIncompleteSample = require './sample/data-sample-incomplete.json'
-dataIncompleteOutput = require './sample/data-sample-incomplete-output.json'
 
 # --------------------------------------------------------------------------------------------------
 describe 'unconfigured meetbot module', ->
@@ -48,14 +42,6 @@ describe 'unconfigured meetbot module', ->
 
 # --------------------------------------------------------------------------------------------------
 describe 'meetbot module', ->
-
-  hubotHear = (message, userName = 'momo', tempo = 40) ->
-    beforeEach (done) ->
-      room.user.say userName, message
-      setTimeout (done), tempo
-
-  hubot = (message, userName = 'momo') ->
-    hubotHear "@hubot #{message}", userName
 
   hubotResponse = (i = 1) ->
     room.messages[i]?[1]
