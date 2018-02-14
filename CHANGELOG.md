@@ -3,6 +3,7 @@ Hubot-meetbot Changelog
 
 ### 1.0.1 - wip
 - some refactoring to prepare a github adapter
+- change `meet show` to `meet show md` to prepare for more formats
 
 ### 1.0.0 - 2018-01-27
 - add a `link` command to keep links
